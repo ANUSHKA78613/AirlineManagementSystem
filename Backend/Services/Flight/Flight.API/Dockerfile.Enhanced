@@ -1,0 +1,33 @@
+# Multi-stage build for Flight Service
+
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS builder
+
+WORKDIR /src
+
+COPY ["Services/Flight/Flight.API/Flight.API.csproj", "Services/Flight/Flight.API/"]
+COPY ["Services/Flight/Flight.Domain/Flight.Domain.csproj", "Services/Flight/Flight.Domain/"]
+COPY ["Services/Flight/Flight.Application/Flight.Application.csproj", "Services/Flight/Flight.Application/"]
+COPY ["Services/Flight/Flight.Infrastructure/Flight.Infrastructure.csproj", "Services/Flight/Flight.Infrastructure/"]
+
+RUN dotnet restore "Services/Flight/Flight.API/Flight.API.csproj"
+COPY . .
+WORKDIR "/src/Services/Flight/Flight.API"
+RUN dotnet build "Flight.API.csproj" -c Release -o /app/build
+
+FROM builder AS publish
+RUN dotnet publish "Flight.API.csproj" -c Release -o /app/publish
+
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
+
+WORKDIR /app
+COPY --from=publish /app/publish .
+RUN mkdir -p /app/logs/Flight
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:5104/health || exit 1
+
+EXPOSE 5104
+ENV ASPNETCORE_URLS=http://+:5104
+ENV ASPNETCORE_ENVIRONMENT=Production
+
+ENTRYPOINT ["dotnet", "Flight.API.dll"]

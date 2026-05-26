@@ -1,0 +1,170 @@
+version: '3.8'
+
+services:
+  airline-sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: airline-sqlserver
+    environment:
+      ACCEPT_EULA: 'Y'
+      SA_PASSWORD: 'YourPassword@123'
+    ports:
+      - '7434:1433'
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    networks:
+      - airline-network
+
+  airline-rabbitmq:
+    image: rabbitmq:3.12-management
+    container_name: airline-rabbitmq
+    ports:
+
+      - '15673:15672'
+      - '5672:5672'
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - airline-network
+
+  airline-redis:
+    image: redis:7-alpine
+    container_name: airline-redis
+    ports:
+      - '6379:6379'
+    networks:
+      - airline-network
+
+  # ── Microservices ──────────────────────────────────────────────────────────
+
+  identity-api:
+    build:
+      context: .
+      dockerfile: Services/Identity/Identity.API/Dockerfile
+    container_name: identity-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: 'http://+:8080'
+      ConnectionStrings__DefaultConnection: 'Server=airline-sqlserver;Database=AirlineIdentityDb;User Id=sa;Password=YourPassword@123;TrustServerCertificate=True;'
+      RabbitMQ__Host: 'airline-rabbitmq'
+      ConnectionStrings__Redis: 'airline-redis:6379'
+    depends_on:
+      - airline-sqlserver
+      - airline-rabbitmq
+    networks:
+      - airline-network
+
+  flight-api:
+    build:
+      context: .
+      dockerfile: Services/Flight/Flight.API/Dockerfile
+    container_name: flight-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: 'http://+:8080'
+      ConnectionStrings__DefaultConnection: 'Server=airline-sqlserver;Database=AirlineFlightDb;User Id=sa;Password=YourPassword@123;TrustServerCertificate=True;'
+      RabbitMQ__Host: 'airline-rabbitmq'
+      ConnectionStrings__Redis: 'airline-redis:6379'
+    depends_on:
+      - airline-sqlserver
+      - airline-rabbitmq
+    networks:
+      - airline-network
+
+  booking-api:
+    build:
+      context: .
+      dockerfile: Services/Booking/Booking.API/Dockerfile
+    container_name: booking-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: 'http://+:8080'
+      ConnectionStrings__DefaultConnection: 'Server=airline-sqlserver;Database=AirlineBookingDb;User Id=sa;Password=YourPassword@123;TrustServerCertificate=True;'
+      RabbitMQ__Host: 'airline-rabbitmq'
+      ConnectionStrings__Redis: 'airline-redis:6379'
+    depends_on:
+      - airline-sqlserver
+      - airline-rabbitmq
+    networks:
+      - airline-network
+
+  payment-api:
+    build:
+      context: .
+      dockerfile: Services/Payment/Payment.API/Dockerfile
+    container_name: payment-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: 'http://+:8080'
+      ConnectionStrings__DefaultConnection: 'Server=airline-sqlserver;Database=AirlinePaymentDb;User Id=sa;Password=YourPassword@123;TrustServerCertificate=True;'
+      RabbitMQ__Host: 'airline-rabbitmq'
+      ConnectionStrings__Redis: 'airline-redis:6379'
+    depends_on:
+      - airline-sqlserver
+      - airline-rabbitmq
+    networks:
+      - airline-network
+
+  operations-api:
+    build:
+      context: .
+      dockerfile: Services/Operations/Operations.API/Dockerfile
+    container_name: operations-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: 'http://+:8080'
+      ConnectionStrings__DefaultConnection: 'Server=airline-sqlserver;Database=AirlineOperationsDb;User Id=sa;Password=YourPassword@123;TrustServerCertificate=True;'
+      RabbitMQ__Host: 'airline-rabbitmq'
+      ConnectionStrings__Redis: 'airline-redis:6379'
+    depends_on:
+      - airline-sqlserver
+      - airline-rabbitmq
+      - airline-redis
+    networks:
+      - airline-network
+
+  dealer-api:
+    build:
+      context: .
+      dockerfile: Services/Dealer/Dealer.API/Dockerfile
+    container_name: dealer-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: 'http://+:8080'
+      ConnectionStrings__DefaultConnection: 'Server=airline-sqlserver;Database=AirlineDealerDb;User Id=sa;Password=YourPassword@123;TrustServerCertificate=True;'
+      RabbitMQ__Host: 'airline-rabbitmq'
+      ConnectionStrings__Redis: 'airline-redis:6379'
+    depends_on:
+      - airline-sqlserver
+      - airline-rabbitmq
+    networks:
+      - airline-network
+
+  # ── API Gateway (exposed to host on 9118 to match frontend config) ─────────
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: Services/ApiGateway/Dockerfile
+    container_name: api-gateway
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: 'http://+:9118'
+    ports:
+      - '9118:9118'
+    depends_on:
+      - identity-api
+      - flight-api
+      - booking-api
+      - payment-api
+      - operations-api
+      - dealer-api
+    networks:
+      - airline-network
+
+networks:
+  airline-network:
+    driver: bridge
+
+volumes:
+  sqlserver-data:
+  rabbitmq-data:

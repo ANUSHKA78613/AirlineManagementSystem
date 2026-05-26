@@ -1,0 +1,436 @@
+<!-- Top Navigation Shell -->
+<nav class="fixed top-0 w-full z-50 bg-[#131313]/80 backdrop-blur-xl flex justify-between items-center px-8 py-4 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+    <div class="font-serif italic text-2xl text-[#f2ca50] cursor-pointer" routerLink="/">SkyHorizon</div>
+    <div class="hidden md:flex items-center space-x-8">
+        <a class="font-serif tracking-tight text-lg text-[#d6c692]/70 hover:text-[#f2ca50] transition-colors duration-300 cursor-pointer" routerLink="/passenger/search">Fleet</a>
+        <a class="font-serif tracking-tight text-lg text-[#d6c692]/70 hover:text-[#f2ca50] transition-colors duration-300 cursor-pointer" routerLink="/passenger/bookings">Itinerary</a>
+    </div>
+    <div class="flex items-center gap-6 relative">
+        <button (click)="toggleNotifications()" class="relative text-[#d6c692]/70 hover:text-[#f2ca50] transition-all duration-300">
+            <span class="material-symbols-outlined">notifications</span>
+            <span *ngIf="unreadCount > 0" class="absolute -top-1 -right-1 bg-error text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">{{ unreadCount }}</span>
+        </button>
+        <button class="text-[#d6c692]/70 hover:text-[#f2ca50] transition-all duration-300" routerLink="/passenger/profile">
+            <span class="material-symbols-outlined">account_circle</span>
+        </button>
+        <button (click)="doLogout()" class="text-error/70 hover:text-error transition-all duration-300">
+            <span class="material-symbols-outlined">logout</span>
+        </button>
+
+        <!-- Notifications Dropdown -->
+        <div *ngIf="showNotifications" class="absolute top-[120%] right-10 w-80 bg-surface-container-high border border-outline-variant/20 rounded-xl shadow-2xl z-50 overflow-hidden backdrop-blur-xl animate-fadeIn">
+          <div class="bg-surface-container-low p-4 border-b border-outline-variant/10 flex justify-between items-center">
+             <h4 class="font-bold text-on-surface text-sm uppercase tracking-widest">Notifications</h4>
+             <button (click)="toggleNotifications()" class="text-secondary/60 hover:text-secondary"><span class="material-symbols-outlined text-sm">close</span></button>
+          </div>
+          <div class="max-h-80 overflow-y-auto p-2">
+             <div *ngIf="notifications.length === 0" class="p-4 text-center text-secondary/50 text-xs">No recent notifications</div>
+             <div *ngFor="let n of notifications" class="p-3 mb-1 bg-surface-container-low rounded-lg border border-outline-variant/5 transition-all" [class.opacity-60]="n.read">
+                <div class="flex justify-between items-start mb-1">
+                   <div class="flex items-center gap-2">
+                     <span class="material-symbols-outlined text-sm" [style.color]="n.color">{{ n.icon }}</span>
+                     <span class="text-xs font-bold text-on-surface">{{ n.title }}</span>
+                   </div>
+                   <span class="text-[9px] text-secondary/40">{{ n.timestamp | date:'shortTime' }}</span>
+                </div>
+                <p class="text-[11px] text-secondary/70 line-clamp-2 leading-relaxed ml-6">{{ n.message }}</p>
+             </div>
+          </div>
+        </div>
+    </div>
+</nav>
+
+<div class="pt-24 pb-12 px-4 md:px-8 max-w-6xl mx-auto min-h-screen">
+  <!-- Loading -->
+  <div *ngIf="loading" class="flex flex-col items-center justify-center py-20">
+    <div class="w-12 h-12 border-2 border-primary/20 border-t-primary rounded-full animate-spin mb-4"></div>
+    <p class="text-secondary/60 text-sm">Loading flight details...</p>
+  </div>
+
+  <ng-container *ngIf="!loading && flight">
+    <!-- Hero Header -->
+    <header class="mb-10 text-center">
+      <span class="font-label text-[0.6875rem] uppercase tracking-[0.2em] text-secondary/60 mb-2 block">Booking Confirmation</span>
+      <h1 class="font-headline text-4xl md:text-5xl tracking-tight text-on-surface mb-2">
+        Reserve <span class="italic text-primary">{{ flight.flightNumber }}</span>
+      </h1>
+      <p class="text-secondary/60">Complete your passenger details and select your preferred seats</p>
+    </header>
+
+    <!-- Stepper -->
+    <div class="flex items-center justify-center gap-4 mb-10">
+      <div class="flex items-center gap-2" [class.text-primary]="step >= 1" [class.text-outline]="step < 1">
+        <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm transition-colors"
+             [ngClass]="step >= 1 ? 'bg-primary text-on-primary' : 'bg-surface-container-low text-outline'">1</div>
+        <span class="font-bold text-xs uppercase tracking-wider hidden sm:block">Passenger Details</span>
+      </div>
+      <div class="w-16 h-[2px] rounded transition-colors" [ngClass]="step >= 2 ? 'primary-gradient' : 'bg-outline-variant/30'"></div>
+      <div class="flex items-center gap-2" [class.text-primary]="step >= 2" [class.text-outline]="step < 2">
+        <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm transition-colors"
+             [ngClass]="step >= 2 ? 'bg-primary text-on-primary' : 'bg-surface-container-low text-outline'">2</div>
+        <span class="font-bold text-xs uppercase tracking-wider hidden sm:block">Seat Selection</span>
+      </div>
+    </div>
+
+    <!-- Main Booking Layout -->
+    <div class="flex flex-col lg:flex-row gap-8">
+      <!-- Left: Details & Seat Map -->
+      <div class="flex-1">
+        <!-- Flight Info Teaser -->
+        <div class="bg-surface-container-low rounded-xl p-6 border border-outline-variant/5 mb-6">
+          <div class="flex justify-between items-center">
+            <div class="flex items-center gap-6">
+              <div class="text-center">
+                <p class="font-headline text-2xl text-on-surface">{{ flight.departureTime | date:'HH:mm' }}</p>
+                <p class="text-[9px] text-primary/50 font-mono">{{ flight.departureTime | date:'HH:mm':'UTC' }} UTC</p>
+                <p class="font-label text-[0.6875rem] text-secondary/50 uppercase tracking-widest">{{ flight.source }}</p>
+              </div>
+              <div class="flex flex-col items-center px-6">
+                <span class="material-symbols-outlined text-primary/40 text-sm">flight_takeoff</span>
+                <p class="text-[9px] text-primary/60 font-bold my-1">{{ getFlightDuration() }}</p>
+                <div class="w-24 h-[1px] bg-outline-variant/30 mt-1"></div>
+              </div>
+              <div class="text-center">
+                <p class="font-headline text-2xl text-on-surface">{{ flight.arrivalTime | date:'HH:mm' }}</p>
+                <p class="text-[9px] text-primary/50 font-mono">{{ flight.arrivalTime | date:'HH:mm':'UTC' }} UTC</p>
+                <p class="font-label text-[0.6875rem] text-secondary/50 uppercase tracking-widest">{{ flight.destination }}</p>
+              </div>
+            </div>
+            <div class="hidden md:block text-right">
+              <span class="px-3 py-1 bg-primary/10 text-primary text-[10px] uppercase font-bold tracking-tighter rounded-full border border-primary/20">{{ flight.airline }}</span>
+              <p class="text-xs text-secondary/40 mt-2">{{ flight.departureTime | date:'dd MMM yyyy' }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 1: Passenger Details Form -->
+        <div [class.hidden]="step !== 1">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="font-headline text-xl text-on-surface">Passenger Information</h3>
+            <button (click)="addPassenger()" class="px-4 py-2 bg-surface-container-low border border-primary/20 text-primary font-bold text-[10px] uppercase tracking-widest rounded-lg hover:bg-primary/5 transition-all flex items-center gap-2">
+              <span class="material-symbols-outlined text-sm">person_add</span> Add Passenger
+            </button>
+          </div>
+
+          <div class="bg-surface-container-low rounded-xl p-6 border border-outline-variant/5 mb-6 hover:border-primary/20 transition-colors">
+             <h4 class="font-bold text-sm uppercase tracking-widest text-primary/80 mb-4">Contact Details</h4>
+             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+               <div class="space-y-2">
+                 <label class="text-[10px] uppercase tracking-widest text-[#d6c692]/60 font-bold">Booking Email</label>
+                 <input [(ngModel)]="contactEmail" type="email" class="w-full bg-surface-container border-none focus:ring-1 focus:ring-primary rounded-lg text-sm text-on-surface py-3 px-3 placeholder:text-outline/30" placeholder="passenger@example.com" />
+               </div>
+             </div>
+             <p class="text-[11px] text-secondary/60 mt-3 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">info</span> Booking confirmation and e-tickets will be sent to this email address.</p>
+          </div>
+
+          <div class="space-y-4">
+            <div *ngFor="let p of passengers; let i = index" class="bg-surface-container-low rounded-xl p-6 border border-outline-variant/5 hover:border-primary/10 transition-all group">
+              <div class="flex justify-between items-center mb-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-bold text-xs">{{ i + 1 }}</div>
+                  <span class="text-xs font-bold uppercase tracking-widest text-secondary/60">Passenger {{ i + 1 }}</span>
+                </div>
+                <button *ngIf="i > 0" (click)="removePassenger(i)" class="w-8 h-8 rounded-full text-error/60 hover:text-error hover:bg-error/10 transition-all flex items-center justify-center">
+                  <span class="material-symbols-outlined text-sm">delete</span>
+                </button>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div class="space-y-2">
+                  <label class="text-[10px] uppercase tracking-widest text-[#d6c692]/60 font-bold">Full Name</label>
+                  <input [(ngModel)]="p.name" class="w-full bg-surface-container border-none focus:ring-1 focus:ring-primary rounded-lg text-sm text-on-surface py-3 px-3 placeholder:text-outline/30" placeholder="John Doe" />
+                </div>
+                <div class="space-y-2">
+                  <label class="text-[10px] uppercase tracking-widest text-[#d6c692]/60 font-bold">Age</label>
+                  <input type="number" [(ngModel)]="p.age" class="w-full bg-surface-container border-none focus:ring-1 focus:ring-primary rounded-lg text-sm text-on-surface py-3 px-3 placeholder:text-outline/30" placeholder="25" min="1" max="120" />
+                </div>
+                <div class="space-y-2">
+                  <label class="text-[10px] uppercase tracking-widest text-[#d6c692]/60 font-bold">Gender</label>
+                  <select [(ngModel)]="p.gender" class="w-full bg-surface-container border-none focus:ring-1 focus:ring-primary rounded-lg text-sm text-on-surface py-3 px-3 appearance-none">
+                    <option value="">Select</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div class="space-y-2 col-span-1">
+                  <label class="text-[10px] uppercase tracking-widest text-[#d6c692]/60 font-bold">Baggage (kg)</label>
+                  <input type="number" [(ngModel)]="p.baggageWeight" class="w-full bg-surface-container border-none focus:ring-1 focus:ring-primary rounded-lg text-sm text-on-surface py-3 px-3 placeholder:text-outline/30" placeholder="15" min="1" />
+                </div>
+              </div>
+
+              <!-- Baggage Fee Alert -->
+              <div *ngIf="p.baggageWeight && p.baggageWeight > 15" class="mt-4 champagne-glass border-l-4 border-warning p-3 flex items-center gap-3 rounded">
+                <span class="material-symbols-outlined text-warning text-sm">luggage</span>
+                <p class="text-xs text-warning">Extra baggage fee of ₹{{ (p.baggageWeight - 15) * 500 }} will be added.</p>
+              </div>
+
+              <!-- Age Validation Alert -->
+              <div *ngIf="p.age && p.age < 2" class="mt-4 champagne-glass border-l-4 border-error p-3 flex items-center gap-3 rounded">
+                <span class="material-symbols-outlined text-error text-sm">warning</span>
+                <p class="text-xs text-error">Infants under 2 must be accompanied by an adult. No separate seat required.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8 flex justify-end">
+            <button [disabled]="!canProceedToSeats" (click)="goToStep(2)"
+                class="px-8 py-4 primary-gradient text-on-primary font-bold text-sm tracking-widest uppercase metallic-glow transition-all rounded-lg disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2">
+              Choose Seats <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 2: Seat Selection Map -->
+        <div [class.hidden]="step !== 2">
+          <h3 class="font-headline text-xl text-on-surface mb-6">Interactive Seat Map</h3>
+
+          <!-- Quick Jump Navigation -->
+          <div class="jump-nav sticky top-24 z-30 metallic-nav-glow">
+            <button (click)="scrollToClass('First')" class="jump-btn">
+              <span class="material-symbols-outlined text-sm align-middle mr-1">star</span> First
+            </button>
+            <button (click)="scrollToClass('Business')" class="jump-btn">
+              <span class="material-symbols-outlined text-sm align-middle mr-1">business_center</span> Business
+            </button>
+            <button (click)="scrollToClass('Economy')" class="jump-btn">
+              <span class="material-symbols-outlined text-sm align-middle mr-1">chair</span> Economy
+            </button>
+          </div>
+
+          <!-- Class Tabs Removed - Showing unified map -->
+          <div class="flex flex-wrap justify-center gap-6 mb-8 text-xs font-bold uppercase tracking-widest text-on-surface">
+             <!-- Interactive State Legend -->
+            <div class="flex items-center gap-2"><div class="w-5 h-5 rounded border bg-[rgba(255,255,255,0.04)] border-[rgba(255,255,255,0.1)]"></div> <span>Available</span></div>
+            <div class="flex items-center gap-2"><div class="w-5 h-5 rounded border bg-[rgba(242,202,80,0.2)] border-[#f2ca50] shadow-[0_0_10px_rgba(242,202,80,0.3)]"></div> <span class="text-primary">Selected</span></div>
+            <div class="flex items-center gap-2"><div class="w-5 h-5 rounded border bg-[rgba(255,60,60,0.15)] border-[rgba(255,60,60,0.5)] flex items-center justify-center"><span class="material-symbols-outlined text-[12px] text-[rgba(255,60,60,0.7)]">close</span></div> <span class="text-error/60">Booked</span></div>
+            <div class="flex items-center gap-2"><div class="w-5 h-5 rounded border bg-[rgba(59,130,246,0.08)] border-[rgba(59,130,246,0.3)] flex items-center justify-center"><span class="text-[9px] text-blue-400">W</span></div> <span class="text-blue-400">Window</span></div>
+          </div>
+
+          <!-- All Classes Blocks -->
+          <ng-container *ngFor="let block of seatBlocks; let last = last">
+            <div class="flex justify-center mb-6 mt-16 scroll-mt-32" [id]="'class-section-' + block.seatClass">
+              <div class="px-6 py-2 bg-surface-container-high rounded-full text-[10px] uppercase tracking-widest text-[#f2ca50] font-bold border border-[#f2ca50]/20 shadow-[0_0_15px_rgba(242,202,80,0.1)]">
+                <span *ngIf="block.seatClass === 'First'" class="material-symbols-outlined text-sm align-middle mr-1">flight</span>
+                {{ block.seatClass }} Class • ₹{{ getClassPrice(block.seatClass) | number:'1.0-0' }}
+              </div>
+            </div>
+
+            <!-- Seat Grid for Block -->
+            <div class="flex flex-col gap-3 items-center">
+              <div *ngFor="let row of block.rows" class="flex justify-center items-center gap-2 md:gap-3">
+                <!-- Left side -->
+                <button *ngFor="let col of block.leftCols" (click)="toggleSeat(row, col, block.seatClass)"
+                    class="seat-btn w-10 h-10 md:w-12 md:h-12 rounded text-[9px] font-bold transition-all duration-200 flex flex-col items-center justify-center border relative"
+                    [title]="getSeatTooltip(row, col, block.seatClass)"
+                    [style.background]="getSeatBg(getFullSeatNo(row, col, block.seatClass), row)"
+                    [style.borderColor]="getSeatBorder(getFullSeatNo(row, col, block.seatClass), row)"
+                    [style.color]="getSeatColor(getFullSeatNo(row, col, block.seatClass), row)"
+                    [style.cursor]="getSeatStatus(getFullSeatNo(row, col, block.seatClass)) === 'occupied' ? 'not-allowed' : 'pointer'"
+                    [style.opacity]="getSeatStatus(getFullSeatNo(row, col, block.seatClass)) === 'occupied' ? '0.5' : '1'"
+                    [class.shadow-[0_0_10px_rgba(242,202,80,0.3)]]="getSeatStatus(getFullSeatNo(row, col, block.seatClass)) === 'selected'">
+                  <span *ngIf="isWindowSeat(row, col, block.seatClass) && getSeatStatus(getFullSeatNo(row, col, block.seatClass)) !== 'occupied'" class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-blue-500/80 text-white text-[6px] flex items-center justify-center font-black">W</span>
+                  <ng-container *ngIf="getSeatStatus(getFullSeatNo(row, col, block.seatClass)) === 'occupied'">
+                    <span class="material-symbols-outlined text-[16px]">close</span>
+                    <span class="text-[7px] opacity-60">{{ row }}{{ col }}</span>
+                  </ng-container>
+                  <ng-container *ngIf="getSeatStatus(getFullSeatNo(row, col, block.seatClass)) !== 'occupied'">
+                    <span class="text-[10px] leading-none">{{ row }}{{ col }}</span>
+                    <span class="text-[7px] opacity-50 leading-none">₹{{ getSeatPrice(row, col, block.seatClass) | number:'1.0-0' }}</span>
+                  </ng-container>
+                </button>
+
+                <div class="w-6 md:w-8 text-center text-outline/20 text-xs font-mono" *ngIf="block.midCols.length === 0">{{ row }}</div>
+
+                <!-- Mid side (if 3 parts map) -->
+                <ng-container *ngIf="block.midCols.length > 0">
+                  <div class="w-2 md:w-3 text-center text-outline/20 text-[10px] font-mono"></div>
+                  <button *ngFor="let col of block.midCols" (click)="toggleSeat(row, col, block.seatClass)"
+                      class="seat-btn w-10 h-10 md:w-12 md:h-12 rounded text-[9px] font-bold transition-all duration-200 flex flex-col items-center justify-center border relative"
+                      [title]="getSeatTooltip(row, col, block.seatClass)"
+                      [style.background]="getSeatBg(getFullSeatNo(row, col, block.seatClass), row)"
+                      [style.borderColor]="getSeatBorder(getFullSeatNo(row, col, block.seatClass), row)"
+                      [style.color]="getSeatColor(getFullSeatNo(row, col, block.seatClass), row)"
+                      [style.cursor]="getSeatStatus(getFullSeatNo(row, col, block.seatClass)) === 'occupied' ? 'not-allowed' : 'pointer'"
+                      [style.opacity]="getSeatStatus(getFullSeatNo(row, col, block.seatClass)) === 'occupied' ? '0.5' : '1'"
+                      [class.shadow-[0_0_10px_rgba(242,202,80,0.3)]]="getSeatStatus(getFullSeatNo(row, col, block.seatClass)) === 'selected'">
+                    <span *ngIf="isWindowSeat(row, col, block.seatClass) && getSeatStatus(getFullSeatNo(row, col, block.seatClass)) !== 'occupied'" class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-blue-500/80 text-white text-[6px] flex items-center justify-center font-black">W</span>
+                    <ng-container *ngIf="getSeatStatus(getFullSeatNo(row, col, block.seatClass)) === 'occupied'">
+                      <span class="material-symbols-outlined text-[16px]">close</span>
+                      <span class="text-[7px] opacity-60">{{ row }}{{ col }}</span>
+                    </ng-container>
+                    <ng-container *ngIf="getSeatStatus(getFullSeatNo(row, col, block.seatClass)) !== 'occupied'">
+                      <span class="text-[10px] leading-none">{{ row }}{{ col }}</span>
+                      <span class="text-[7px] opacity-50 leading-none">₹{{ getSeatPrice(row, col, block.seatClass) | number:'1.0-0' }}</span>
+                    </ng-container>
+                  </button>
+                  <div class="w-2 md:w-3 text-center text-outline/20 text-[10px] font-mono"></div>
+                </ng-container>
+
+                <div class="w-6 md:w-8 text-center text-outline/20 text-xs font-mono" *ngIf="block.midCols.length > 0">{{ row }}</div>
+
+                <!-- Right side -->
+                <button *ngFor="let col of block.rightCols" (click)="toggleSeat(row, col, block.seatClass)"
+                    class="seat-btn w-10 h-10 md:w-12 md:h-12 rounded text-[9px] font-bold transition-all duration-200 flex flex-col items-center justify-center border relative"
+                    [title]="getSeatTooltip(row, col, block.seatClass)"
+                    [style.background]="getSeatBg(getFullSeatNo(row, col, block.seatClass), row)"
+                    [style.borderColor]="getSeatBorder(getFullSeatNo(row, col, block.seatClass), row)"
+                    [style.color]="getSeatColor(getFullSeatNo(row, col, block.seatClass), row)"
+                    [style.cursor]="getSeatStatus(getFullSeatNo(row, col, block.seatClass)) === 'occupied' ? 'not-allowed' : 'pointer'"
+                    [style.opacity]="getSeatStatus(getFullSeatNo(row, col, block.seatClass)) === 'occupied' ? '0.5' : '1'"
+                    [class.shadow-[0_0_10px_rgba(242,202,80,0.3)]]="getSeatStatus(getFullSeatNo(row, col, block.seatClass)) === 'selected'">
+                  <span *ngIf="isWindowSeat(row, col, block.seatClass) && getSeatStatus(getFullSeatNo(row, col, block.seatClass)) !== 'occupied'" class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-blue-500/80 text-white text-[6px] flex items-center justify-center font-black">W</span>
+                  <ng-container *ngIf="getSeatStatus(getFullSeatNo(row, col, block.seatClass)) === 'occupied'">
+                    <span class="material-symbols-outlined text-[16px]">close</span>
+                    <span class="text-[7px] opacity-60">{{ row }}{{ col }}</span>
+                  </ng-container>
+                  <ng-container *ngIf="getSeatStatus(getFullSeatNo(row, col, block.seatClass)) !== 'occupied'">
+                    <span class="text-[10px] leading-none">{{ row }}{{ col }}</span>
+                    <span class="text-[7px] opacity-50 leading-none">₹{{ getSeatPrice(row, col, block.seatClass) | number:'1.0-0' }}</span>
+                  </ng-container>
+                </button>
+              </div>
+            </div>
+
+            <!-- Tail Indicator for lowest class -->
+            <div class="flex justify-center mt-6 mb-8" *ngIf="last || block.seatClass === 'Economy'">
+              <div class="px-6 py-2 bg-surface-container-high rounded-full text-[10px] uppercase tracking-widest text-secondary/40 font-bold border border-outline-variant/10">
+                Flight Attendants & Lavatory <span class="material-symbols-outlined text-sm align-middle ml-1">wc</span>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- Bottom Bar -->
+          <div class="mt-8 flex flex-col md:flex-row justify-between items-center bg-surface-container-low p-6 rounded-xl border border-outline-variant/5 gap-4">
+            <button (click)="goToStep(1)" class="px-6 py-3 bg-surface-container-low border border-outline-variant/20 text-secondary font-bold text-xs tracking-widest uppercase rounded-lg hover:bg-primary/5 transition-all flex items-center gap-2">
+              <span class="material-symbols-outlined text-sm">arrow_back</span> Back
+            </button>
+
+            <div class="flex items-center gap-3 bg-surface-container px-4 py-2 rounded-lg border border-outline-variant/10">
+              <span class="text-xs text-secondary/50">Seats:</span>
+              <span class="font-bold text-primary text-sm">
+                <ng-container *ngFor="let p of passengers; let last = last">{{ p.seatNo || '?' }}{{ !last ? ', ' : '' }}</ng-container>
+              </span>
+            </div>
+
+            <button [disabled]="booking || !canConfirm" (click)="confirmBooking()"
+                class="px-8 py-4 primary-gradient text-on-primary font-bold text-sm tracking-widest uppercase metallic-glow transition-all rounded-lg disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2">
+              <ng-container *ngIf="!booking">
+                <span class="material-symbols-outlined text-sm">lock</span> Proceed to Pay
+              </ng-container>
+              <ng-container *ngIf="booking">
+                <div class="w-4 h-4 border-2 border-on-primary/30 border-t-on-primary rounded-full animate-spin"></div> Confirming...
+              </ng-container>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Floating Summary -->
+      <div class="w-full lg:w-80">
+        <div class="bg-surface-container-high rounded-2xl p-8 sticky top-28 shadow-2xl border border-outline-variant/10">
+          <h4 class="text-xl font-headline text-primary mb-6">Fare Summary</h4>
+          <div class="space-y-4 mb-6">
+            <div *ngFor="let p of passengers; let i = index" class="flex justify-between text-sm">
+              <span class="text-secondary/60">Passenger {{i + 1}} ({{p.seatClass || 'Pending Selection'}})</span>
+              <span class="text-on-surface font-medium">₹{{ getPassengerSeatPrice(p) | number:'1.0-0' }}</span>
+            </div>
+            <div class="flex justify-between text-sm">
+              <span class="text-secondary/60">Taxes & Fees</span>
+              <span class="text-on-surface font-medium">Included</span>
+            </div>
+            <div class="flex justify-between text-sm">
+              <span class="text-secondary/60">Subtotal</span>
+              <span class="text-on-surface font-medium">₹{{ totalAmountBeforeDiscount | number:'1.0-0' }}</span>
+            </div>
+            <div *ngIf="appliedCoupon" class="flex justify-between text-sm">
+              <span class="text-green-400">Coupon Discount ({{ appliedCoupon.discountPercent }}%)</span>
+              <span class="text-green-400 font-bold">-₹{{ couponDiscountAmount | number:'1.0-0' }}</span>
+            </div>
+            <div *ngIf="appliedPoints > 0" class="flex justify-between text-sm">
+              <span class="text-green-400">Reward Points</span>
+              <span class="text-green-400 font-bold">-₹{{ appliedPoints | number:'1.0-0' }}</span>
+            </div>
+            <div class="h-px bg-outline-variant/20"></div>
+            <div class="flex justify-between">
+              <span class="text-sm font-bold text-secondary">Total</span>
+              <span class="text-2xl font-headline text-primary">₹{{ totalAmount | number:'1.0-0' }}</span>
+            </div>
+          </div>
+
+          <!-- Selected Seats Summary -->
+          <div *ngIf="passengers.some(p => p.seatNo)" class="bg-surface-container-low rounded-lg p-4 border border-primary/10 mb-6">
+            <span class="text-[10px] uppercase tracking-widest text-primary/60 font-bold block mb-2">Selected Seats</span>
+            <div class="flex flex-wrap gap-2">
+              <span *ngFor="let p of passengers" class="px-3 py-1 rounded-full text-[10px] font-bold tracking-tighter"
+                    [ngClass]="p.seatNo ? 'bg-primary/10 text-primary border border-primary/20' : 'bg-surface-container text-outline border border-outline-variant/10'">
+                {{ p.seatNo || 'Not selected' }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Coupon UI -->
+          <div class="bg-surface-container-low rounded-lg p-4 border border-outline-variant/5 mb-6">
+            <span class="text-[10px] uppercase tracking-widest text-secondary/60 font-bold block mb-2">Promotional Code</span>
+            
+            <div *ngIf="!appliedCoupon" class="flex gap-2">
+              <input type="text" [(ngModel)]="couponCode" class="w-full bg-surface-container border-none focus:ring-1 focus:ring-primary rounded-lg text-sm text-on-surface py-2 px-3 placeholder:text-outline/40 uppercase" placeholder="COUPON CODE" />
+              <button (click)="applyCoupon()" [disabled]="!couponCode || validatingCoupon" class="px-4 bg-primary/20 hover:bg-primary/30 text-primary font-bold text-xs uppercase tracking-widest rounded-lg transition-colors disabled:opacity-50">
+                {{ validatingCoupon ? '...' : 'Apply' }}
+              </button>
+            </div>
+            
+            <p *ngIf="couponError" class="text-xs text-error mt-2">{{ couponError }}</p>
+
+            <!-- Available Coupons Suggestions -->
+            <div *ngIf="!appliedCoupon && availableCoupons && availableCoupons.length > 0" class="mt-3 space-y-2">
+              <span class="text-[9px] uppercase tracking-widest text-secondary/40 font-bold block">Available Coupons</span>
+              <div class="flex flex-wrap gap-2">
+                <button *ngFor="let c of availableCoupons" (click)="selectCoupon(c.code)"
+                    class="px-2 py-1 bg-primary/5 hover:bg-primary/20 border border-primary/20 hover:border-primary/50 text-left rounded transition-colors group relative w-full flex justify-between items-center">
+                  <div>
+                    <span class="text-[11px] font-bold text-primary block">{{ c.code }}</span>
+                    <span class="text-[9px] text-secondary/70">{{ c.discountPercent }}% off</span>
+                  </div>
+                  <span class="text-[10px] uppercase font-bold text-primary/60 group-hover:text-primary transition-colors">Apply</span>
+                </button>
+              </div>
+            </div>
+
+            <div *ngIf="appliedCoupon" class="flex justify-between items-center bg-primary/10 border border-primary/20 p-2 rounded-lg">
+              <div>
+                <span class="text-xs font-bold text-primary">{{ appliedCoupon.code }} applied</span>
+                <span class="text-[10px] block text-primary/70">-{{ appliedCoupon.discountPercent }}% off</span>
+              </div>
+              <button (click)="removeCoupon()" class="w-6 h-6 rounded-full bg-error/10 text-error flex items-center justify-center hover:bg-error/20 transition-colors">
+                <span class="material-symbols-outlined text-[14px]">close</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Reward Points UI -->
+          <div *ngIf="rewardBalance > 0" class="bg-surface-container-low rounded-lg p-4 border border-outline-variant/5">
+            <span class="text-[10px] uppercase tracking-widest text-secondary/60 font-bold block mb-2">Reward Points (Bal: {{ rewardBalance }})</span>
+            
+            <div *ngIf="appliedPoints === 0" class="flex gap-2">
+              <input type="number" [(ngModel)]="pointsToRedeem" class="w-full bg-surface-container border-none focus:ring-1 focus:ring-primary rounded-lg text-sm text-on-surface py-2 px-3 placeholder:text-outline/40" placeholder="Points to use" min="1" [max]="rewardBalance" />
+              <button (click)="applyPoints()" [disabled]="!pointsToRedeem || pointsToRedeem <= 0" class="px-4 bg-primary/20 hover:bg-primary/30 text-primary font-bold text-xs uppercase tracking-widest rounded-lg transition-colors disabled:opacity-50">
+                Apply
+              </button>
+            </div>
+
+            <div *ngIf="appliedPoints > 0" class="flex justify-between items-center bg-primary/10 border border-primary/20 p-2 rounded-lg">
+              <div>
+                <span class="text-xs font-bold text-primary">{{ appliedPoints }} Points applied</span>
+                <span class="text-[10px] block text-primary/70">-₹{{ appliedPoints }}</span>
+              </div>
+              <button (click)="removePoints()" class="w-6 h-6 rounded-full bg-error/10 text-error flex items-center justify-center hover:bg-error/20 transition-colors">
+                <span class="material-symbols-outlined text-[14px]">close</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

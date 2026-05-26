@@ -1,0 +1,188 @@
+<!-- Dark Gold SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-64 flex flex-col z-50 bg-[#131313] dark:bg-[#0e0e0e] border-r border-[#f2ca50]/10 shadow-[4px_0_24px_rgba(0,0,0,0.5)]">
+  <div class="p-8">
+    <h1 class="text-xl font-serif italic text-[#f2ca50]">SkyHorizon</h1>
+    <p class="text-[10px] uppercase tracking-[0.2em] text-[#d6c692]/50 mt-1">Ground Ops</p>
+  </div>
+  
+  <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
+    <button (click)="setTab('issues')" class="flex items-center gap-3 px-4 py-3 w-full text-left transition-colors"
+            [ngClass]="tab === 'issues' ? 'bg-gradient-to-r from-[#f2ca50]/20 to-transparent text-[#f2ca50] border-l-4 border-[#f2ca50]' : 'text-[#d6c692]/60 hover:text-[#f2ca50] hover:bg-[#f2ca50]/5'">
+      <span class="material-symbols-outlined text-sm">support_agent</span>
+      <span class="text-xs font-label tracking-wider">Customer Support</span>
+    </button>
+
+    <button (click)="setTab('boarding')" class="flex items-center gap-3 px-4 py-3 w-full text-left transition-colors"
+            [ngClass]="tab === 'boarding' ? 'bg-gradient-to-r from-[#f2ca50]/20 to-transparent text-[#f2ca50] border-l-4 border-[#f2ca50]' : 'text-[#d6c692]/60 hover:text-[#f2ca50] hover:bg-[#f2ca50]/5'">
+      <span class="material-symbols-outlined text-sm">qr_code_scanner</span>
+      <span class="text-xs font-label tracking-wider">Boarding Gate</span>
+    </button>
+  </nav>
+
+  <div class="border-t border-[#f2ca50]/15 p-4 space-y-1">
+    <a routerLink="/profile" class="flex items-center gap-3 px-4 py-2 text-[#d6c692]/60 hover:text-[#f2ca50] transition-colors cursor-pointer">
+      <span class="material-symbols-outlined text-sm">account_circle</span>
+      <span class="text-[10px] font-label uppercase tracking-widest">My Profile</span>
+    </a>
+    <a (click)="auth.logout()" class="flex items-center gap-3 px-4 py-2 text-error/60 hover:text-error transition-colors cursor-pointer">
+      <span class="material-symbols-outlined text-sm">logout</span>
+      <span class="text-[10px] font-label uppercase tracking-widest">Sign Out</span>
+    </a>
+  </div>
+</aside>
+
+<!-- Main Canvas -->
+<main class="flex-1 ml-64 min-h-screen flex flex-col bg-surface">
+  <!-- TopNavBar -->
+  <header class="flex justify-between items-center w-full px-8 py-6 bg-[#131313]/40 backdrop-blur-xl z-40 sticky top-0">
+    <div class="flex items-center gap-8">
+      <h2 class="text-2xl font-serif italic text-[#f2ca50]">Ground Control</h2>
+    </div>
+    <div class="flex items-center gap-3 relative group">
+      <span class="text-[#d6c692] text-xs font-bold">{{ auth.currentUser?.name }}</span>
+      <div class="w-10 h-10 rounded-full flex items-center justify-center bg-primary/20 ring-2 ring-primary/30 cursor-pointer text-primary font-bold hover:bg-primary/30 transition-colors">
+        {{ (auth.currentUser?.name?.charAt(0) || 'S') | uppercase }}
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Content -->
+  <div class="p-8 max-w-7xl mx-auto w-full">
+      
+      <!-- ISSUES / CUSTOMER SUPPORT TAB -->
+      <div *ngIf="tab === 'issues'" class="animate-fadeIn">
+        <div class="mb-8">
+          <h1 class="text-3xl font-bold font-outfit mb-2">Customer Support</h1>
+          <p class="text-text-secondary">Passenger concerns and support tickets.</p>
+        </div>
+        
+        <div class="space-y-4">
+          @if (issuesLoading) {
+            <div class="py-12 text-center text-text-muted"><div class="spinner inline-block mb-4"></div><br>Loading issues...</div>
+          } @else if (issues.length === 0) {
+            <div class="py-12 text-center text-text-muted opacity-50">
+               <span class="material-symbols-outlined text-4xl mb-2">done_all</span>
+               <p>No support tickets right now.</p>
+            </div>
+          } @else {
+            @for (issue of issues; track issue.issueId) {
+              <div class="card p-6 border-l-4 shadow-lg animate-fadeInUp" [ngClass]="issue.status === 'Resolved' ? 'border-l-success' : 'border-l-warning'">
+                <div class="flex justify-between items-start mb-4">
+                   <div>
+                     <h3 class="font-bold text-lg font-outfit text-white">{{ issue.title }} <span class="bg-bg-glass text-xs text-text-muted px-2 py-0.5 rounded ml-2">{{ issue.category }}</span></h3>
+                     <p class="text-[11px] uppercase tracking-wider text-text-muted mt-1 font-mono">
+                        {{ issue.passengerEmail || 'STAFF INTERNAL' }} &nbsp;·&nbsp; Ticket #{{ issue.issueId }} &nbsp;·&nbsp; {{ issue.createdAt | date:'short' }}
+                     </p>
+                   </div>
+                   <span class="badge" [ngClass]="issue.status === 'Resolved' ? 'badge-success' : 'badge-warning font-bold'">{{ issue.status }}</span>
+                </div>
+                <p class="text-sm text-text-secondary mb-4 leading-relaxed bg-[#151515] p-3 rounded-lg border border-border-color/50">{{ issue.description }}</p>
+                
+                @if (issue.status !== 'Resolved') {
+                  <div class="bg-bg-glass p-4 rounded-xl mt-4 border border-border-color shadow-inner">
+                    <label class="text-xs font-bold uppercase tracking-wider text-[#d6c692] mb-3 flex items-center"><span class="material-symbols-outlined text-[16px] mr-1">quick_reference_all</span> Reply to Passenger</label>
+                    <textarea class="form-control mb-3 text-sm min-h-[80px]" [(ngModel)]="issue._replyText" placeholder="Type your response here... (This will notify the passenger)"></textarea>
+                    <button class="btn btn-primary btn-sm px-6" (click)="replyToIssue(issue)" [disabled]="!issue._replyText || issue._submitting">
+                       @if (issue._submitting) { <div class="spinner spinner-sm inline-block"></div> } @else { <span class="material-symbols-outlined text-[18px] mr-1">send</span> Send Reply & Resolve }
+                    </button>
+                    <button *ngIf="!issue.passengerEmail" class="btn btn-secondary btn-sm ml-2" (click)="resolveIssue(issue.issueId)">Just Resolve Internally</button>
+                  </div>
+                } @else {
+                  @if (issue.staffReply) {
+                    <div class="bg-success/5 p-4 rounded-xl mt-4 border border-success/20">
+                       <span class="text-xs font-bold uppercase tracking-wider text-success mb-2 flex items-center"><span class="material-symbols-outlined text-[16px] mr-1">verified_user</span> Staff Response</span>
+                       <p class="text-sm text-[#d1fae5] italic">"{{ issue.staffReply }}"</p>
+                    </div>
+                  }
+                }
+              </div>
+            }
+          }
+        </div>
+      </div>
+
+      <!-- BOARDING GATE TAB -->
+      <div *ngIf="tab === 'boarding'" class="animate-fadeIn">
+        <div class="mb-8">
+          <h1 class="text-3xl font-bold font-outfit mb-2">Boarding Gate</h1>
+          <p class="text-text-secondary">Enter a PNR to board passengers and send notification.</p>
+        </div>
+
+        <div class="card p-6 max-w-2xl border-l-4 border-l-accent-primary animate-fadeInUp">
+          <h3 class="font-bold text-lg font-outfit mb-4">Enter PNR</h3>
+          <div class="flex gap-3">
+            <input type="text" class="form-control" [(ngModel)]="boardingPnr" placeholder="e.g. PNR79755308" style="flex:2" (keyup.enter)="boardPassengers()">
+            <button class="btn btn-primary shadow-glow" (click)="boardPassengers()" [disabled]="boardingLoading" style="min-width: 140px">
+              @if (boardingLoading) {
+                <div class="spinner spinner-sm inline-block mr-2"></div> Processing...
+              } @else {
+                <span class="material-symbols-outlined mr-2">flight_takeoff</span> Submit
+              }
+            </button>
+          </div>
+        </div>
+
+        <!-- Boarding Result -->
+        @if (boardingResult) {
+          <div class="card p-6 mt-6 max-w-2xl animate-fadeInUp border-l-4" [ngClass]="boardingResult.success ? 'border-l-success' : 'border-l-error'">
+            <div class="flex items-center gap-4 mb-4">
+              <div class="w-14 h-14 rounded-full flex items-center justify-center" [ngClass]="boardingResult.success ? 'bg-success/20 text-success' : 'bg-error/20 text-error'">
+                <span class="material-symbols-outlined text-3xl">{{ boardingResult.success ? 'check_circle' : 'error' }}</span>
+              </div>
+              <div>
+                <h3 class="font-bold font-outfit text-xl" [ngClass]="boardingResult.success ? 'text-success' : 'text-error'">
+                  {{ boardingResult.success ? 'Passenger Boarded Successfully' : 'Boarding Failed' }}
+                </h3>
+                <p class="text-text-secondary text-sm">{{ boardingResult.message }}</p>
+              </div>
+            </div>
+
+            @if (boardingResult.success && boardingResult.passengers) {
+              <div class="space-y-3 mt-4">
+                @for (p of boardingResult.passengers; track $index) {
+                  <div class="bg-success/5 border border-success/20 rounded-lg p-4 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                      <div class="text-success text-xl"><span class="material-symbols-outlined">how_to_reg</span></div>
+                      <div>
+                        <div class="font-bold text-sm">{{ p.name || ('Passenger #' + p.passengerId) }}</div>
+                        <div class="text-xs text-text-muted">Seat <span class="text-accent-secondary font-bold">{{ p.seatNo }}</span> • Gate <span class="text-[#f2ca50] font-bold">{{ p.gate }}</span></div>
+                      </div>
+                    </div>
+                    <span class="text-[10px] px-3 py-1 bg-success/10 text-success rounded-full font-bold uppercase tracking-wider">Boarded</span>
+                  </div>
+                }
+              </div>
+
+              @if (boardingResult.notificationSent) {
+                <div class="mt-4 flex items-center gap-2 text-xs text-[#f2ca50] bg-[#f2ca50]/5 p-3 rounded-lg border border-[#f2ca50]/20">
+                  <span class="material-symbols-outlined text-sm">notifications_active</span>
+                  Boarding notification sent to passenger's email.
+                </div>
+              }
+            }
+          </div>
+        }
+
+        <!-- Boarded History -->
+        @if (boardedList.length > 0) {
+          <div class="card p-6 mt-6 max-w-2xl animate-fadeInUp">
+            <h3 class="font-bold font-outfit mb-4 text-lg">Boarded Today ({{ boardedList.length }})</h3>
+            <div class="space-y-3">
+              @for (b of boardedList; track $index) {
+                <div class="bg-bg-glass border border-border-color rounded-lg p-3 flex items-center justify-between">
+                  <div class="flex items-center gap-3">
+                    <div class="text-success text-xl"><span class="material-symbols-outlined">check_circle</span></div>
+                    <div>
+                      <div class="font-bold font-mono text-sm">{{ b.pnr }} <span class="text-text-secondary ml-2 text-xs font-sans">{{ b.passengerCount }} passenger(s)</span></div>
+                      <div class="text-xs text-text-muted">{{ b.scannedAt | date:'HH:mm:ss' }}</div>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+
+    </div>
+</main>

@@ -1,0 +1,14 @@
+<div class="stat-card">
+  <div class="icon text-[32px] text-accent-primary bg-accent-primary/10 w-14 h-14 rounded-2xl flex items-center justify-center">
+    <span class="material-symbols-outlined">{{ icon }}</span>
+  </div>
+  <div class="info flex-1">
+    <p class="text-xs uppercase tracking-widest text-text-secondary font-bold mb-1">{{ title }}</p>
+    <h3 class="text-2xl font-bold font-outfit">{{ value }}</h3>
+    <div *ngIf="trend !== undefined" class="flex items-center gap-1 mt-2 text-[10px] font-bold uppercase tracking-wider" 
+         [ngClass]="trend >= 0 ? 'text-success' : 'text-error'">
+      <span class="material-symbols-outlined text-[14px]">{{ trend >= 0 ? 'north_east' : 'south_east' }}</span>
+      <span>{{ trend > 0 ? '+' : '' }}{{ trend }}% <span class="text-text-muted">{{ trendLabel }}</span></span>
+    </div>
+  </div>
+</div>

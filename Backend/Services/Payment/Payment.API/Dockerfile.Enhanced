@@ -1,0 +1,34 @@
+# Multi-stage build for Payment Service
+
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS builder
+
+WORKDIR /src
+
+COPY ["Services/Payment/Payment.API/Payment.API.csproj", "Services/Payment/Payment.API/"]
+COPY ["Services/Payment/Payment.Domain/Payment.Domain.csproj", "Services/Payment/Payment.Domain/"]
+COPY ["Services/Payment/Payment.Application/Payment.Application.csproj", "Services/Payment/Payment.Application/"]
+COPY ["Services/Payment/Payment.Infrastructure/Payment.Infrastructure.csproj", "Services/Payment/Payment.Infrastructure/"]
+COPY ["Services/Shared/EventBus/EventBus.csproj", "Services/Shared/EventBus/"]
+
+RUN dotnet restore "Services/Payment/Payment.API/Payment.API.csproj"
+COPY . .
+WORKDIR "/src/Services/Payment/Payment.API"
+RUN dotnet build "Payment.API.csproj" -c Release -o /app/build
+
+FROM builder AS publish
+RUN dotnet publish "Payment.API.csproj" -c Release -o /app/publish
+
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
+
+WORKDIR /app
+COPY --from=publish /app/publish .
+RUN mkdir -p /app/logs/Payment
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:5105/health || exit 1
+
+EXPOSE 5105
+ENV ASPNETCORE_URLS=http://+:5105
+ENV ASPNETCORE_ENVIRONMENT=Production
+
+ENTRYPOINT ["dotnet", "Payment.API.dll"]

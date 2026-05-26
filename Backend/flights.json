@@ -1,0 +1,74 @@
+[
+  {
+    "flightId": 1,
+    "flightNumber": "SKY101",
+    "source": "DEL",
+    "destination": "BOM",
+    "departureTime": "2026-04-08T04:06:00",
+    "arrivalTime": "2026-04-08T07:12:00",
+    "aircraftId": 1,
+    "status": "Scheduled",
+    "price": 5600.0,
+    "gateNumber": null
+  },
+  {
+    "flightId": 2,
+    "flightNumber": "F102",
+    "source": "DEL",
+    "destination": "MUM",
+    "departureTime": "2026-04-04T04:19:00",
+    "arrivalTime": "2026-04-04T08:22:00",
+    "aircraftId": 1,
+    "status": "Scheduled",
+    "price": 6000.45,
+    "gateNumber": null
+  },
+  {
+    "flightId": 3,
+    "flightNumber": "F103",
+    "source": "BOM",
+    "destination": "DEL",
+    "departureTime": "2026-04-04T05:18:00",
+    "arrivalTime": "2026-04-11T01:23:00",
+    "aircraftId": 1,
+    "status": "Scheduled",
+    "price": 4571.0,
+    "gateNumber": null
+  },
+  {
+    "flightId": 4,
+    "flightNumber": "F104",
+    "source": "DEL",
+    "destination": "DUB",
+    "departureTime": "2026-04-04T21:00:00",
+    "arrivalTime": "2026-04-04T23:30:00",
+    "aircraftId": 1,
+    "status": "Scheduled",
+    "price": 18000.0,
+    "gateNumber": null
+  },
+  {
+    "flightId": 5,
+    "flightNumber": "F105",
+    "source": "DEL",
+    "destination": "DOHA",
+    "departureTime": "2026-04-04T21:15:00",
+    "arrivalTime": "2026-04-04T23:23:00",
+    "aircraftId": 1,
+    "status": "Scheduled",
+    "price": 20000.34,
+    "gateNumber": null
+  },
+  {
+    "flightId": 6,
+    "flightNumber": "F201",
+    "source": "DEL",
+    "destination": "BOM",
+    "departureTime": "2026-04-08T04:27:00",
+    "arrivalTime": "2026-04-08T06:31:00",
+    "aircraftId": 1,
+    "status": "Scheduled",
+    "price": 4500.0,
+    "gateNumber": null
+  }
+]

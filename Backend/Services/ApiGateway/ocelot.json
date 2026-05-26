@@ -1,0 +1,1047 @@
+{
+  "Routes": [
+    {
+      "_comment": "Identity — Auth GET (login status, profile)",
+      "UpstreamPathTemplate": "/api/Auth/{everything}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/Auth/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "identity-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 10000,
+        "TimeoutValue": 5000
+      }
+    },
+    {
+      "_comment": "Identity — Auth POST (login, register, OTP, refresh)",
+      "UpstreamPathTemplate": "/api/Auth/{everything}",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/Auth/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "identity-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Identity — Auth PUT (profile update)",
+      "UpstreamPathTemplate": "/api/Auth/{everything}",
+      "UpstreamHttpMethod": [ "PUT" ],
+      "DownstreamPathTemplate": "/api/Auth/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "identity-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 10000,
+        "TimeoutValue": 8000
+      }
+    },
+    {
+      "_comment": "Identity — Auth PATCH (password reset)",
+      "UpstreamPathTemplate": "/api/Auth/{everything}",
+      "UpstreamHttpMethod": [ "PATCH" ],
+      "DownstreamPathTemplate": "/api/Auth/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "identity-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 10000,
+        "TimeoutValue": 8000
+      }
+    },
+    {
+      "_comment": "Identity — Auth DELETE (account, cleanup)",
+      "UpstreamPathTemplate": "/api/Auth/{everything}",
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "DownstreamPathTemplate": "/api/Auth/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "identity-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 2,
+        "DurationOfBreak": 20000,
+        "TimeoutValue": 15000
+      }
+    },
+    {
+      "_comment": "SSO — GET",
+      "UpstreamPathTemplate": "/api/Sso/{everything}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/Sso/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "identity-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 10000,
+        "TimeoutValue": 8000
+      }
+    },
+    {
+      "_comment": "SSO — POST",
+      "UpstreamPathTemplate": "/api/Sso/{everything}",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/Sso/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "identity-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Google SSO Callback — GET",
+      "UpstreamPathTemplate": "/signin-google",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/signin-google",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "identity-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 10000,
+        "TimeoutValue": 15000
+      }
+    },
+    {
+      "_comment": "Google SSO Callback — POST",
+      "UpstreamPathTemplate": "/signin-google",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/signin-google",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "identity-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 10000,
+        "TimeoutValue": 15000
+      }
+    },
+    {
+      "_comment": "Identity catch-all — GET",
+      "UpstreamPathTemplate": "/identity/api/{everything}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "identity-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 10000,
+        "TimeoutValue": 5000
+      }
+    },
+    {
+      "_comment": "Identity catch-all — POST",
+      "UpstreamPathTemplate": "/identity/api/{everything}",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "identity-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Identity catch-all — PUT",
+      "UpstreamPathTemplate": "/identity/api/{everything}",
+      "UpstreamHttpMethod": [ "PUT" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "identity-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 2,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Identity catch-all — PATCH",
+      "UpstreamPathTemplate": "/identity/api/{everything}",
+      "UpstreamHttpMethod": [ "PATCH" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "identity-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 2,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Identity catch-all — DELETE",
+      "UpstreamPathTemplate": "/identity/api/{everything}",
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "identity-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 2,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Flight — GET (search, seat map, pricing)",
+      "UpstreamPathTemplate": "/flight/api/{everything}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "flight-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 5,
+        "DurationOfBreak": 10000,
+        "TimeoutValue": 5000
+      }
+    },
+    {
+      "_comment": "Flight — POST (add flight, reserve seat)",
+      "UpstreamPathTemplate": "/flight/api/{everything}",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "flight-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Flight — PUT (update flight)",
+      "UpstreamPathTemplate": "/flight/api/{everything}",
+      "UpstreamHttpMethod": [ "PUT" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "flight-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Flight — PATCH (update flight status)",
+      "UpstreamPathTemplate": "/flight/api/{everything}",
+      "UpstreamHttpMethod": [ "PATCH" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "flight-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Flight — DELETE",
+      "UpstreamPathTemplate": "/flight/api/{everything}",
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "flight-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 2,
+        "DurationOfBreak": 20000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Booking — GET (list, details)",
+      "UpstreamPathTemplate": "/booking/api/{everything}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "booking-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 5,
+        "DurationOfBreak": 10000,
+        "TimeoutValue": 5000
+      }
+    },
+    {
+      "_comment": "Booking — POST (create booking)",
+      "UpstreamPathTemplate": "/booking/api/{everything}",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "booking-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 15000
+      }
+    },
+    {
+      "_comment": "Booking — PUT (update booking)",
+      "UpstreamPathTemplate": "/booking/api/{everything}",
+      "UpstreamHttpMethod": [ "PUT" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "booking-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Booking — PATCH (update status)",
+      "UpstreamPathTemplate": "/booking/api/{everything}",
+      "UpstreamHttpMethod": [ "PATCH" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "booking-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Booking — DELETE (cancel)",
+      "UpstreamPathTemplate": "/booking/api/{everything}",
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "booking-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 2,
+        "DurationOfBreak": 20000,
+        "TimeoutValue": 15000
+      }
+    },
+    {
+      "_comment": "Payment — GET",
+      "UpstreamPathTemplate": "/payment/api/{everything}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "payment-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 5,
+        "DurationOfBreak": 10000,
+        "TimeoutValue": 5000
+      }
+    },
+    {
+      "_comment": "Payment — POST (process payment)",
+      "UpstreamPathTemplate": "/payment/api/{everything}",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "payment-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 2,
+        "DurationOfBreak": 20000,
+        "TimeoutValue": 30000
+      }
+    },
+    {
+      "_comment": "Payment — PUT",
+      "UpstreamPathTemplate": "/payment/api/{everything}",
+      "UpstreamHttpMethod": [ "PUT" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "payment-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 2,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Payment — PATCH",
+      "UpstreamPathTemplate": "/payment/api/{everything}",
+      "UpstreamHttpMethod": [ "PATCH" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "payment-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 2,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Payment — DELETE",
+      "UpstreamPathTemplate": "/payment/api/{everything}",
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "payment-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 2,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Operations — GET (check-in status, boarding passes, issues)",
+      "UpstreamPathTemplate": "/operations/api/{everything}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "operations-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 5,
+        "DurationOfBreak": 10000,
+        "TimeoutValue": 5000
+      }
+    },
+    {
+      "_comment": "Operations — POST (check-in, baggage, issues)",
+      "UpstreamPathTemplate": "/operations/api/{everything}",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "operations-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Operations — PUT (update issues)",
+      "UpstreamPathTemplate": "/operations/api/{everything}",
+      "UpstreamHttpMethod": [ "PUT" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "operations-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Operations — PATCH (update boarding)",
+      "UpstreamPathTemplate": "/operations/api/{everything}",
+      "UpstreamHttpMethod": [ "PATCH" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "operations-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Operations — DELETE",
+      "UpstreamPathTemplate": "/operations/api/{everything}",
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "operations-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 2,
+        "DurationOfBreak": 20000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Notification (in Operations) — GET",
+      "UpstreamPathTemplate": "/notification/api/{everything}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "operations-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 5,
+        "DurationOfBreak": 10000,
+        "TimeoutValue": 5000
+      }
+    },
+    {
+      "_comment": "Notification (in Operations) — POST",
+      "UpstreamPathTemplate": "/notification/api/{everything}",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "operations-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Notification (in Operations) — PUT",
+      "UpstreamPathTemplate": "/notification/api/{everything}",
+      "UpstreamHttpMethod": [ "PUT" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "operations-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Notification (in Operations) — PATCH",
+      "UpstreamPathTemplate": "/notification/api/{everything}",
+      "UpstreamHttpMethod": [ "PATCH" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "operations-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Notification (in Operations) — DELETE",
+      "UpstreamPathTemplate": "/notification/api/{everything}",
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "operations-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Inventory (in Flight) — GET (seat map)",
+      "UpstreamPathTemplate": "/inventory/api/{everything}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "flight-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 5,
+        "DurationOfBreak": 10000,
+        "TimeoutValue": 5000
+      }
+    },
+    {
+      "_comment": "Inventory (in Flight) — POST (reserve/release seat)",
+      "UpstreamPathTemplate": "/inventory/api/{everything}",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "flight-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Inventory (in Flight) — PUT",
+      "UpstreamPathTemplate": "/inventory/api/{everything}",
+      "UpstreamHttpMethod": [ "PUT" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "flight-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 2,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Inventory (in Flight) — PATCH",
+      "UpstreamPathTemplate": "/inventory/api/{everything}",
+      "UpstreamHttpMethod": [ "PATCH" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "flight-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 2,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Inventory (in Flight) — DELETE",
+      "UpstreamPathTemplate": "/inventory/api/{everything}",
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "flight-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 2,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Pricing (in Flight) — GET",
+      "UpstreamPathTemplate": "/pricing/api/{everything}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "flight-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 5,
+        "DurationOfBreak": 10000,
+        "TimeoutValue": 5000
+      }
+    },
+    {
+      "_comment": "Pricing (in Flight) — POST",
+      "UpstreamPathTemplate": "/pricing/api/{everything}",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "flight-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Pricing (in Flight) — PUT",
+      "UpstreamPathTemplate": "/pricing/api/{everything}",
+      "UpstreamHttpMethod": [ "PUT" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "flight-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Pricing (in Flight) — PATCH",
+      "UpstreamPathTemplate": "/pricing/api/{everything}",
+      "UpstreamHttpMethod": [ "PATCH" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "flight-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Pricing (in Flight) — DELETE",
+      "UpstreamPathTemplate": "/pricing/api/{everything}",
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "flight-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Dealer — GET",
+      "UpstreamPathTemplate": "/dealer/api/{everything}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "dealer-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 5,
+        "DurationOfBreak": 10000,
+        "TimeoutValue": 5000
+      }
+    },
+    {
+      "_comment": "Dealer — POST (wallet ops, bulk booking)",
+      "UpstreamPathTemplate": "/dealer/api/{everything}",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "dealer-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Dealer — PUT (update dealer)",
+      "UpstreamPathTemplate": "/dealer/api/{everything}",
+      "UpstreamHttpMethod": [ "PUT" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "dealer-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Dealer — PATCH (partial update dealer)",
+      "UpstreamPathTemplate": "/dealer/api/{everything}",
+      "UpstreamHttpMethod": [ "PATCH" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "dealer-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Dealer — DELETE",
+      "UpstreamPathTemplate": "/dealer/api/{everything}",
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "dealer-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 2,
+        "DurationOfBreak": 20000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Reward (in Dealer) — GET",
+      "UpstreamPathTemplate": "/reward/api/{everything}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "dealer-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 5,
+        "DurationOfBreak": 10000,
+        "TimeoutValue": 5000
+      }
+    },
+    {
+      "_comment": "Reward (in Dealer) — POST",
+      "UpstreamPathTemplate": "/reward/api/{everything}",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "dealer-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Reward (in Dealer) — PUT",
+      "UpstreamPathTemplate": "/reward/api/{everything}",
+      "UpstreamHttpMethod": [ "PUT" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "dealer-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Reward (in Dealer) — PATCH",
+      "UpstreamPathTemplate": "/reward/api/{everything}",
+      "UpstreamHttpMethod": [ "PATCH" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "dealer-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Reward (in Dealer) — DELETE",
+      "UpstreamPathTemplate": "/reward/api/{everything}",
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "dealer-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Commission (in Dealer) — GET",
+      "UpstreamPathTemplate": "/commission/api/{everything}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "dealer-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 5,
+        "DurationOfBreak": 10000,
+        "TimeoutValue": 5000
+      }
+    },
+    {
+      "_comment": "Commission (in Dealer) — POST",
+      "UpstreamPathTemplate": "/commission/api/{everything}",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "dealer-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Commission (in Dealer) — PUT",
+      "UpstreamPathTemplate": "/commission/api/{everything}",
+      "UpstreamHttpMethod": [ "PUT" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "dealer-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Commission (in Dealer) — PATCH",
+      "UpstreamPathTemplate": "/commission/api/{everything}",
+      "UpstreamHttpMethod": [ "PATCH" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "dealer-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Commission (in Dealer) — DELETE",
+      "UpstreamPathTemplate": "/commission/api/{everything}",
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "dealer-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Analytics (in Operations) — GET",
+      "UpstreamPathTemplate": "/analytics/api/{everything}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "operations-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 5,
+        "DurationOfBreak": 10000,
+        "TimeoutValue": 5000
+      }
+    },
+    {
+      "_comment": "Analytics (in Operations) — POST",
+      "UpstreamPathTemplate": "/analytics/api/{everything}",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "operations-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Analytics (in Operations) — PUT",
+      "UpstreamPathTemplate": "/analytics/api/{everything}",
+      "UpstreamHttpMethod": [ "PUT" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "operations-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Analytics (in Operations) — PATCH",
+      "UpstreamPathTemplate": "/analytics/api/{everything}",
+      "UpstreamHttpMethod": [ "PATCH" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "operations-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    },
+    {
+      "_comment": "Analytics (in Operations) — DELETE",
+      "UpstreamPathTemplate": "/analytics/api/{everything}",
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "operations-api", "Port": 8080 }
+      ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 15000,
+        "TimeoutValue": 10000
+      }
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://api-gateway:8080",
+    "QoSOptions": {
+      "ExceptionsAllowedBeforeBreaking": 3,
+      "DurationOfBreak": 10000,
+      "TimeoutValue": 5000
+    }
+  }
+}

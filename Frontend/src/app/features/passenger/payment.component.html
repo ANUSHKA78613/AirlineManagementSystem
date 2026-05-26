@@ -1,0 +1,282 @@
+<!-- Dark Gold Nav -->
+<nav
+  class="fixed top-0 w-full z-50 bg-[#131313]/80 backdrop-blur-xl flex justify-between items-center px-8 py-4 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+  <div class="font-serif italic text-2xl text-[#f2ca50] cursor-pointer" routerLink="/">SkyHorizon</div>
+  <div class="hidden md:flex items-center space-x-8">
+    <a class="font-serif tracking-tight text-lg text-[#d6c692]/70 hover:text-[#f2ca50] transition-colors duration-300 cursor-pointer"
+      routerLink="/search">Fleet</a>
+    <a class="font-serif tracking-tight text-lg text-[#d6c692]/70 hover:text-[#f2ca50] transition-colors duration-300 cursor-pointer"
+      routerLink="/passenger/bookings">Itinerary</a>
+  </div>
+  <div class="flex items-center gap-4">
+    <button class="text-[#d6c692]/70 hover:text-[#f2ca50] transition-all" routerLink="/passenger/profile"><span
+        class="material-symbols-outlined">account_circle</span></button>
+    <button (click)="doLogout()" class="text-error/70 hover:text-error transition-all duration-300">
+      <span class="material-symbols-outlined">logout</span>
+    </button>
+  </div>
+</nav>
+<div class="max-w-4xl mx-auto py-10 px-4 min-h-screen flex flex-col items-center">
+  @if (step === 'checkout') {
+  <h1 class="text-4xl font-bold font-outfit mb-8 animate-fadeInUp">Complete <span
+      class="bg-clip-text text-transparent bg-gradient-to-r from-accent-primary to-accent-secondary">Payment</span></h1>
+
+  <!-- Summary Card -->
+  <div class="card w-full max-w-lg mb-8 p-8 border-t-4 border-t-accent-primary animate-fadeInUp delay-1">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="text-xl font-bold font-outfit">Booking Summary</h3>
+      <span class="badge badge-info shadow-glow text-base px-3 py-1 font-mono tracking-widest">{{ pnr }}</span>
+    </div>
+
+    <div class="space-y-4 pt-2">
+      <div class="flex justify-between items-center border-b border-border-color pb-4">
+        <span class="text-text-secondary">Flight ID</span>
+        <span class="font-bold">{{ booking?.flightId ? 'AG-' + booking.flightId : '—' }}</span>
+      </div>
+      <div class="flex justify-between items-center border-b border-border-color pb-4">
+        <span class="text-text-secondary">Passengers</span>
+        <span class="font-bold">{{ booking?.passengers?.length || 1 }}</span>
+      </div>
+      <div class="flex justify-between items-center pt-4">
+        <span class="text-text-secondary">Total Amount</span>
+        <span class="text-3xl font-bold font-outfit text-success tracking-tight">₹{{ booking?.totalAmount |
+          number:'1.0-0' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reward Points Redemption -->
+  @if (rewardPoints > 0) {
+  <div class="card w-full max-w-lg mb-8 p-6 border border-[#f2ca50]/30 animate-fadeInUp delay-1"
+    style="animation-delay: 0.15s">
+    <div class="flex justify-between items-center">
+      <div>
+        <span class="text-sm font-bold text-[#f2ca50]">🏆 Reward Points</span>
+        <p class="text-xs text-text-secondary mt-1">You have <strong class="text-[#f2ca50]">{{ rewardPoints }}</strong>
+          points available</p>
+      </div>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" [(ngModel)]="useRewardPoints" (ngModelChange)="togglePoints()"
+          class="w-4 h-4 accent-[#f2ca50]" />
+        <span class="text-sm font-bold">Use Points</span>
+      </label>
+    </div>
+    @if (useRewardPoints) {
+    <div class="mt-3 p-3 bg-[#f2ca50]/10 rounded-lg text-sm">
+      <div class="flex justify-between">
+        <span>Points Discount</span>
+        <span class="font-bold text-[#f2ca50]">-₹{{ pointsToRedeem }}</span>
+      </div>
+      <div class="flex justify-between mt-1 pt-2 border-t border-[#f2ca50]/20">
+        <span class="font-bold">You Pay</span>
+        <span class="font-bold text-success text-lg">₹{{ effectiveAmount | number:'1.0-0' }}</span>
+      </div>
+    </div>
+    }
+  </div>
+  }
+
+  <!-- Payment Action -->
+  <div
+    class="card w-full max-w-lg bg-bg-surface flex flex-col items-center justify-center p-8 border border-accent-primary/50 animate-fadeInUp delay-2">
+    <p class="text-text-secondary mb-6 text-center">You will be redirected securely to Razorpay checkout gateway.</p>
+
+    @if (razorpayOptions) {
+    <app-razorpay-widget [options]="razorpayOptions" buttonText="Pay Securely via Razorpay"
+      class="w-full flex justify-center [&>button]:w-full [&>button]:shadow-glow [&>button]:text-lg [&>button]:py-4"
+      (paymentSuccess)="onPaymentSuccess($event)" (paymentError)="onPaymentError($event)"
+      (paymentClosed)="onPaymentClosed()">
+    </app-razorpay-widget>
+    }
+
+    <div class="mt-6 flex items-center justify-center gap-4 text-text-muted text-2xl opacity-50">
+      <span class="material-symbols-outlined">credit_card</span>
+      <span class="material-symbols-outlined">payments</span>
+      <span class="material-symbols-outlined">account_balance_wallet</span>
+      <span class="material-symbols-outlined">token</span>
+    </div>
+
+    <!-- Cancel button — cancels booking BEFORE Razorpay can auto-capture -->
+    <button (click)="cancelAndGoBack()"
+      class="mt-6 w-full py-3 rounded-xl border border-red-500/40 text-red-400 hover:bg-red-500/10 transition-all duration-300 font-semibold text-sm flex items-center justify-center gap-2">
+      <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+      Cancel & Go Back to Seat Selection
+    </button>
+  </div>
+  }
+
+  @if (step === 'processing') {
+  <div class="flex flex-col items-center justify-center py-20 animate-fadeIn">
+    <div class="relative w-24 h-24 mb-8">
+      <div class="absolute inset-0 border-4 border-accent-primary/30 rounded-full animate-ping"></div>
+      <div class="absolute inset-2 border-4 border-accent-secondary rounded-full border-t-transparent animate-spin">
+      </div>
+      <span
+        class="material-symbols-outlined absolute inset-0 flex items-center justify-center text-3xl text-accent-primary">{{ cancelled ? 'flight_takeoff' : 'verified_user' }}</span>
+    </div>
+    <h2 class="text-2xl font-bold font-outfit mb-2">{{ cancelled ? 'Cancelling Booking...' : 'Verifying Payment' }}</h2>
+    <p class="text-text-secondary">{{ cancelled ? 'Releasing seats and redirecting to itinerary...' : 'Please do not refresh or close this window...' }}</p>
+  </div>
+  }
+
+  @if (step === 'confirming') {
+  <div class="flex flex-col items-center text-center animate-fadeInUp max-w-lg w-full">
+    <div
+      class="w-24 h-24 rounded-full bg-gradient-to-br from-yellow-400 to-amber-600 flex items-center justify-center text-white text-5xl mb-6 shadow-[0_0_40px_rgba(245,158,11,0.4)] animate-countUp">
+      <span class="material-symbols-outlined">payments</span>
+    </div>
+    <h2 class="text-3xl font-bold font-outfit mb-2">Payment Received</h2>
+    <p class="text-text-secondary mb-2">Your payment has been captured. What would you like to do?</p>
+    <p class="text-text-muted text-sm mb-6">If you changed your mind, you can cancel and get a full refund.</p>
+
+    <div class="card w-full p-6 text-left mb-6 border-l-4 border-l-yellow-500 relative overflow-hidden">
+      <div class="relative z-10">
+        <div class="flex justify-between items-center py-3 border-b border-border-color">
+          <span class="text-text-secondary">PNR</span>
+          <span class="font-mono font-bold tracking-widest text-accent-primary">{{ pnr }}</span>
+        </div>
+        <div class="flex justify-between items-center py-3 border-b border-border-color">
+          <span class="text-text-secondary">Transaction ID</span>
+          <span class="font-mono text-sm text-text-muted">{{ transactionId }}</span>
+        </div>
+        <div class="flex justify-between items-center pt-3">
+          <span class="text-text-secondary">Amount</span>
+          <span class="text-lg font-bold font-outfit text-success">₹{{ booking?.totalAmount | number:'1.0-0' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-center w-full">
+      <button (click)="confirmBookingExplicit()"
+        class="btn btn-lg flex-1 justify-center shadow-lg border-2 border-green-500 text-green-400 hover:bg-green-500/20 transition-all duration-300 font-bold"
+        style="background: rgba(34,197,94,0.08);">
+        <span class="material-symbols-outlined mr-2">check_circle</span> Confirm Booking
+      </button>
+      <button (click)="cancelDuringConfirm()"
+        class="btn btn-lg flex-1 justify-center shadow-lg border-2 border-red-500 text-red-400 hover:bg-red-500/20 transition-all duration-300 font-bold"
+        style="background: rgba(239,68,68,0.08);">
+        <span class="material-symbols-outlined mr-2">cancel</span> Cancel & Get Refund
+      </button>
+    </div>
+    <p class="text-text-muted text-xs mt-4">
+      <span class="material-symbols-outlined text-[14px] align-middle mr-1">info</span>
+      Cancelling will release your seats and initiate a full refund.
+    </p>
+  </div>
+  }
+
+  @if (step === 'failed') {
+  <div class="flex flex-col items-center text-center animate-fadeInUp max-w-lg w-full">
+    <div
+      class="w-24 h-24 rounded-full bg-gradient-to-br from-red-500 to-red-800 flex items-center justify-center text-white text-5xl mb-6 shadow-[0_0_40px_rgba(239,68,68,0.4)] animate-countUp">
+      <span class="material-symbols-outlined">close</span>
+    </div>
+    <h2 class="text-3xl font-bold font-outfit mb-2">Payment Failed</h2>
+    <p class="text-text-secondary mb-4">{{ failureReason }}</p>
+
+    <div class="card w-full p-6 text-left mb-8 border-l-4 border-l-red-500 relative overflow-hidden">
+      <div class="relative z-10">
+        <div class="flex justify-between items-center py-3 border-b border-border-color">
+          <span class="text-text-secondary">PNR</span>
+          <span class="font-mono font-bold tracking-widest text-accent-primary">{{ pnr }}</span>
+        </div>
+        <div class="flex justify-between items-center py-3 border-b border-border-color">
+          <span class="text-text-secondary">Refund Status</span>
+          <span class="font-bold" [class.text-yellow-400]="refundStatus === 'initiating'"
+            [class.text-success]="refundStatus === 'processed'"
+            [class.text-text-muted]="refundStatus === 'not_applicable'">
+            @if (refundStatus === 'initiating') {
+            <span class="material-symbols-outlined animate-spin mr-1">progress_activity</span> Processing Refund...
+            } @else if (refundStatus === 'processed') {
+            <span class="material-symbols-outlined mr-1">check_circle</span> Refund Initiated
+            } @else {
+            <span class="material-symbols-outlined mr-1">info</span> No charge applied
+            }
+          </span>
+        </div>
+        <div class="flex justify-between items-center pt-4">
+          <span class="text-text-secondary">Amount</span>
+          <span class="text-lg font-bold font-outfit text-text-primary">₹{{ booking?.totalAmount | number:'1.0-0'
+            }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-center w-full">
+      <button *ngIf="refundStatus !== 'processed'" (click)="retryPayment()"
+        class="btn btn-primary btn-lg flex-1 shadow-glow justify-center">
+        <span class="material-symbols-outlined mr-2">refresh</span> Retry Payment
+      </button>
+      <button (click)="goToBookings()"
+        class="btn btn-secondary btn-lg flex-1 justify-center border-border-color hover:bg-bg-glass">
+        My Bookings
+      </button>
+    </div>
+  </div>
+  }
+
+  @if (step === 'success') {
+  <div class="flex flex-col items-center text-center animate-fadeInUp max-w-lg w-full">
+    <div
+      class="w-24 h-24 rounded-full bg-gradient-to-br from-success to-emerald-700 flex items-center justify-center text-white text-5xl mb-6 shadow-[0_0_40_rgba(16,185,129,0.4)] animate-countUp">
+      <span class="material-symbols-outlined">check</span>
+    </div>
+    <h2 class="text-3xl font-bold font-outfit mb-2">Payment Successful!</h2>
+    <p class="text-text-secondary mb-2">Your booking is confirmed. Complete web check-in to get your boarding pass.</p>
+    @if (pointsEarned > 0) {
+    <div class="flex items-center gap-2 mb-6 px-4 py-2 bg-[#f2ca50]/10 rounded-full border border-[#f2ca50]/30">
+      <span class="text-lg">🏆</span>
+      <span class="text-sm font-bold text-[#f2ca50]">+{{ pointsEarned }} reward points earned!</span>
+    </div>
+    }
+
+    <div class="card w-full p-6 text-left mb-8 border-l-4 border-l-success relative overflow-hidden">
+      <div class="absolute -right-4 -top-4 text-9xl text-success/5"><span
+          class="material-symbols-outlined text-9xl">flight</span></div>
+      <div class="relative z-10">
+        <div class="flex justify-between items-center py-3 border-b border-border-color">
+          <span class="text-text-secondary">Transaction ID</span>
+          <span class="font-mono text-sm text-text-muted">{{ transactionId }}</span>
+        </div>
+        @if (pointsToRedeem > 0) {
+        <div class="flex justify-between items-center py-3 border-b border-border-color">
+          <span class="text-text-secondary">Booking Amount</span>
+          <span class="font-outfit text-text-muted line-through">₹{{ booking?.totalAmount | number:'1.0-0' }}</span>
+        </div>
+        <div class="flex justify-between items-center py-3 border-b border-border-color">
+          <span class="text-text-secondary">Points Redeemed</span>
+          <span class="font-bold text-[#f2ca50] font-outfit">-₹{{ pointsToRedeem | number:'1.0-0' }}</span>
+        </div>
+        }
+        <div class="flex justify-between items-center py-3 border-b border-border-color">
+          <span class="text-text-secondary">Amount Paid</span>
+          <span class="font-bold text-success font-outfit text-lg">₹{{ effectiveAmount | number:'1.0-0' }}</span>
+        </div>
+        <div class="flex justify-between items-center pt-4">
+          <span class="text-text-secondary">PNR</span>
+          <span class="font-mono text-2xl font-bold tracking-widest text-accent-primary">{{ pnr }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-center w-full">
+      <a routerLink="/passenger/bookings" class="btn btn-primary btn-lg flex-1 shadow-glow justify-center">
+        <span class="material-symbols-outlined mr-2">flight_takeoff</span> Web Check-In & Boarding Pass
+      </a>
+      <a routerLink="/passenger/bookings"
+        class="btn btn-secondary btn-lg flex-1 justify-center border-border-color hover:bg-bg-glass">
+        <span class="material-symbols-outlined mr-2">confirmation_number</span> My Bookings
+      </a>
+    </div>
+    <p class="text-text-muted text-xs mt-3 text-center">
+      <span class="material-symbols-outlined text-[14px] align-middle mr-1">info</span>
+      Boarding pass will be available after completing web check-in from My Bookings.
+    </p>
+    <!-- Auto-redirect notice -->
+    <p class="text-text-muted text-xs mt-4 animate-pulse">
+      <span class="material-symbols-outlined text-[14px] align-middle mr-1">schedule</span>
+      Redirecting to My Bookings automatically in 4 seconds…
+    </p>
+  </div>
+  }
+</div>

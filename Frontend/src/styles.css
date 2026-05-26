@@ -1,0 +1,191 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ═══════════════════════════════════════════════════════
+   SkyHorizon Airlines — Dark Gold Design System
+   ═══════════════════════════════════════════════════════ */
+
+/* ── CSS Variables ─────────────────────────────────── */
+:root {
+    --bg-primary: #131313;
+    --bg-card: #1c1b1b;
+    --bg-surface: #232323;
+    --bg-glass: rgba(53, 53, 52, 0.4);
+    --bg-input: #1e1e1e;
+    --text-primary: #e5e2e1;
+    --text-secondary: #99907c;
+    --text-muted: #6b6358;
+    --accent-primary: #f2ca50;
+    --accent-secondary: #d4af37;
+    --border-color: rgba(242, 202, 80, 0.12);
+    --success: #10b981;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+}
+
+/* ── Form Controls ─────────────────────────────────── */
+.form-control {
+    width: 100%;
+    padding: 14px 16px;
+    background: var(--bg-input) !important;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-primary) !important;
+    font-size: 15px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: all 0.3s ease;
+    outline: none;
+}
+.form-control::placeholder {
+    color: var(--text-muted);
+    opacity: 0.6;
+}
+.form-control:focus {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(242, 202, 80, 0.1);
+    background: #252525 !important;
+}
+
+/* Fix Tailwind forms plugin overriding colors */
+input, select, textarea {
+    color: var(--text-primary) !important;
+    background-color: var(--bg-input) !important;
+}
+input::placeholder, textarea::placeholder {
+    color: var(--text-muted) !important;
+}
+input:focus, select:focus, textarea:focus {
+    border-color: var(--accent-primary) !important;
+    box-shadow: 0 0 0 3px rgba(242, 202, 80, 0.1) !important;
+    outline: none !important;
+    --tw-ring-color: transparent !important;
+}
+
+/* ── Form Groups ───────────────────────────────────── */
+.form-group {
+    margin-bottom: 20px;
+}
+.form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+/* ── Buttons ───────────────────────────────────────── */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    text-decoration: none;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+.btn-primary {
+    background: linear-gradient(135deg, #f2ca50 0%, #d4af37 100%);
+    color: #1a1400;
+}
+.btn-primary:hover {
+    box-shadow: 0 0 20px rgba(242, 202, 80, 0.35);
+    transform: translateY(-1px);
+}
+.btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+.btn-secondary {
+    background: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+.btn-secondary:hover {
+    border-color: var(--accent-primary);
+    background: rgba(242, 202, 80, 0.05);
+}
+.btn-full { width: 100%; }
+.btn-lg { padding: 16px 28px; font-size: 15px; }
+.btn-sm { padding: 8px 14px; font-size: 12px; }
+
+/* ── Text Gradient ─────────────────────────────────── */
+.text-gradient {
+    background: linear-gradient(135deg, #f2ca50, #d4af37);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ── Cards ─────────────────────────────────────────── */
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+}
+
+/* ── Badge ─────────────────────────────────────────── */
+.badge { padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+.badge-info { background: rgba(242, 202, 80, 0.15); color: var(--accent-primary); }
+
+/* ── Spinner ───────────────────────────────────────── */
+.spinner {
+    width: 20px; height: 20px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+.spinner-sm { width: 16px; height: 16px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Shadow Glow ───────────────────────────────────── */
+.shadow-glow { box-shadow: 0 0 20px rgba(242, 202, 80, 0.25); }
+
+/* ── Animations ────────────────────────────────────── */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+.animate-fadeInUp { animation: fadeInUp 0.6s ease-out forwards; }
+.animate-fadeIn { animation: fadeIn 0.5s ease-out forwards; }
+
+/* ── Utilities ─────────────────────────────────────── */
+@layer utilities {
+    .metallic-glow:hover {
+        box-shadow: 0 0 15px rgba(242, 202, 80, 0.3);
+    }
+    .champagne-glass {
+        background: rgba(53, 53, 52, 0.4);
+        backdrop-filter: blur(20px);
+    }
+    .primary-gradient {
+        background: linear-gradient(135deg, #f2ca50 0%, #d4af37 100%);
+    }
+}
+
+/* ── Scrollbar ─────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--accent-secondary); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-primary); }

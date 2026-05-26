@@ -1,0 +1,66 @@
+<ng-container *ngIf="userRole === 'Admin' || userRole === 'Staff' || userRole === 'Dealer'; else passengerNav">
+  <!-- TopNavBar (Admin/Staff/Dealer) -->
+  <header class="flex justify-between items-center w-full px-8 py-6 bg-[#131313]/40 backdrop-blur-xl z-40 sticky top-0">
+      <div class="flex items-center gap-8">
+          <h2 class="text-2xl font-serif italic text-[#f2ca50] cursor-pointer" routerLink="/">Flight Command</h2>
+          <nav class="hidden md:flex gap-6">
+              <a class="text-[#f2ca50] font-bold border-b-2 border-[#f2ca50] pb-1 text-xs uppercase tracking-widest cursor-pointer">Global Status</a>
+              <a class="text-[#d6c692] hover:text-[#f2ca50] transition-colors duration-300 text-xs uppercase tracking-widest cursor-pointer">Notifications</a>
+              <a class="text-[#d6c692] hover:text-[#f2ca50] transition-colors duration-300 text-xs uppercase tracking-widest cursor-pointer">Logs</a>
+          </nav>
+      </div>
+      <div class="flex items-center gap-6">
+          <div class="relative cursor-pointer group">
+              <span class="material-symbols-outlined text-[#d6c692] hover:text-[#f2ca50] transition-colors text-[22px]">notifications</span>
+              <span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-error rounded-full ring-2 ring-[#131313]"></span>
+          </div>
+          <button class="flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full text-primary hover:bg-primary/20 transition-all group">
+              <span class="material-symbols-outlined text-sm" data-icon="concierge_bell">doorbell</span>
+              <span class="text-[10px] font-bold uppercase tracking-tighter">Support</span>
+          </button>
+          
+          <ng-container *ngIf="userName">
+              <div class="flex items-center gap-3 relative group">
+                  <span class="text-[#d6c692] text-xs font-bold cursor-pointer hover:text-primary transition" routerLink="/profile">{{ userName }}</span>
+                  <div class="w-10 h-10 rounded-full flex items-center justify-center bg-primary/20 ring-2 ring-primary/30 cursor-pointer text-primary font-bold" routerLink="/profile">
+                    {{ userName.charAt(0) | uppercase }}
+                  </div>
+                  <div class="absolute top-12 right-0 bg-surface-container-high border border-outline-variant/30 rounded-xl p-2 hidden group-hover:block transition-all shadow-lg min-w-32">
+                    <button (click)="onLogout()" class="w-full text-left px-3 py-2 text-error text-xs hover:bg-error/10 rounded-md font-bold transition">Logout</button>
+                  </div>
+              </div>
+          </ng-container>
+      </div>
+  </header>
+</ng-container>
+
+<ng-template #passengerNav>
+  <!-- Top Navigation Shell (Passenger) -->
+  <nav class="fixed top-0 w-full z-50 bg-[#131313]/80 backdrop-blur-xl flex justify-between items-center px-8 py-4 w-full shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+      <div class="font-serif italic text-2xl text-[#f2ca50] cursor-pointer" routerLink="/">SkyHorizon</div>
+      <div class="hidden md:flex items-center space-y-0 space-x-8">
+          <a class="font-serif tracking-tight text-lg text-[#d6c692]/70 hover:text-[#f2ca50] transition-colors duration-300 cursor-pointer" routerLink="/search">Fleet</a>
+          <a class="font-serif tracking-tight text-lg text-[#d6c692]/70 hover:text-[#f2ca50] transition-colors duration-300 cursor-pointer">Concierge</a>
+          <a class="font-serif tracking-tight text-lg text-[#f2ca50] border-b border-[#f2ca50]/50 pb-1 cursor-pointer" routerLink="/bookings">Itinerary</a>
+      </div>
+      <div class="flex items-center gap-6">
+          <button class="text-[#d6c692]/70 hover:text-[#f2ca50] transition-all duration-300">
+              <span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+          </button>
+          
+          <ng-container *ngIf="userName; else loggedOutPassenger">
+            <button class="text-[#d6c692]/70 hover:text-[#f2ca50] transition-all duration-300" routerLink="/profile">
+                <span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+            </button>
+            <button (click)="onLogout()" class="text-error/70 hover:text-error transition-all duration-300">
+                <span class="material-symbols-outlined" data-icon="logout">logout</span>
+            </button>
+          </ng-container>
+
+          <ng-template #loggedOutPassenger>
+            <button class="px-4 py-2 text-xs font-bold text-primary border border-primary/30 rounded-full hover:bg-primary/10 transition-colors" routerLink="/auth/login">LOGIN</button>
+            <button class="px-4 py-2 text-xs font-bold text-on-primary bg-primary rounded-full hover:shadow-[0_0_15px_rgba(242,202,80,0.3)] transition-all" routerLink="/auth/register">SIGN UP</button>
+          </ng-template>
+      </div>
+  </nav>
+</ng-template>

@@ -1,0 +1,76 @@
+# Visual Studio
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.slnLaunch.user
+
+# Build Results
+bin/
+obj/
+publish/
+TestResults/
+
+# Logs
+*.log
+logs/
+.runlogs/
+
+# NuGet
+packages/
+*.nupkg
+.dotnet-home/
+
+# ASP.NET Secrets
+appsettings.Development.json
+appsettings.Local.json
+secrets.json
+
+# Environment Files
+.env
+.env.*
+!.env.example
+
+# Node / Angular
+node_modules/
+dist/
+.angular/
+coverage/
+
+# Temporary Files
+*.tmp
+*.temp
+
+# Build Output Files
+*_out.txt
+build_output.txt
+build_out.txt
+build_out2.txt
+build_out3.txt
+build_err.txt
+build_errors.txt
+error.log
+test_err.txt
+logs.txt
+
+# OS Files
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Rider
+.idea/
+
+# Docker
+docker-compose.override.yml
+
+# Local App Data
+.appdata/
+
+logs.txt
+build_log.txt
+build_err*.txt
+*_out.txt

@@ -1,0 +1,31 @@
+name: Build & Test
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET 10
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+        dotnet-quality: 'preview'
+
+    - name: Restore dependencies
+      run: dotnet restore Backend/AirlineManagementSystem.sln
+
+    - name: Build solution
+      run: dotnet build Backend/AirlineManagementSystem.sln --no-restore -c Release
+
+    - name: Run tests
+      run: dotnet test Backend/AirlineManagementSystem.sln --no-build -c Release --verbosity normal
+      continue-on-error: true

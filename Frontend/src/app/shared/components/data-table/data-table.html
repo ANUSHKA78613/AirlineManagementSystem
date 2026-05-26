@@ -1,0 +1,70 @@
+<div class="table-container bg-bg-card rounded-xl border border-border-color shadow-lg overflow-hidden">
+  <div *ngIf="loading" class="p-8 flex justify-center w-full">
+    <div class="spinner spinner-lg"></div>
+  </div>
+  
+  <div class="overflow-x-auto w-full">
+    <table *ngIf="!loading" class="w-full text-left border-collapse">
+    <thead class="bg-bg-surface border-b border-border-color">
+      <tr>
+        <th *ngFor="let col of columns" class="p-4 text-xs font-semibold uppercase tracking-wider text-text-secondary">
+          {{ col.header }}
+        </th>
+        <th *ngIf="hasActions" class="p-4 text-xs font-semibold uppercase tracking-wider text-text-secondary text-right">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-border-color">
+      <tr *ngFor="let row of data" class="hover:bg-bg-glass transition-colors">
+        <td *ngFor="let col of columns" class="p-4 text-sm text-text-primary">
+          <ng-container *ngIf="col.field === 'status' || col.field === '_status'; else normalText">
+            <span class="px-2.5 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1.5 border"
+                  [ngClass]="{
+                    'bg-success/10 text-success border-success/20': row[col.field] === 'Active' || row[col.field] === 'Scheduled' || row[col.field] === 'Paid',
+                    'bg-error/10 text-error border-error/20': row[col.field] === 'Deactivated' || row[col.field] === 'Cancelled',
+                    'bg-bg-glass text-text-muted border-border-color': row[col.field] !== 'Active' && row[col.field] !== 'Scheduled' && row[col.field] !== 'Paid' && row[col.field] !== 'Deactivated' && row[col.field] !== 'Cancelled'
+                  }">
+              <span class="w-1.5 h-1.5 rounded-full" 
+                    [ngClass]="{
+                      'bg-success': row[col.field] === 'Active' || row[col.field] === 'Scheduled' || row[col.field] === 'Paid',
+                      'bg-error': row[col.field] === 'Deactivated' || row[col.field] === 'Cancelled',
+                      'bg-text-muted': row[col.field] !== 'Active' && row[col.field] !== 'Scheduled' && row[col.field] !== 'Paid' && row[col.field] !== 'Deactivated' && row[col.field] !== 'Cancelled'
+                    }"></span>
+              {{ row[col.field] }}
+            </span>
+          </ng-container>
+          <ng-template #normalText>
+            {{ row[col.field] }}
+          </ng-template>
+        </td>
+        <td *ngIf="hasActions" class="p-4 text-right whitespace-nowrap">
+          <div class="flex justify-end gap-3 items-center">
+            <button *ngIf="showToggle" (click)="toggleState.emit(row)"
+                    [ngClass]="row.isActive ? 'bg-[#131118] hover:bg-black border-[#131118] text-[#f2ca50] hover:text-[#f2ca50]' : 'bg-[#f2ca50] hover:bg-[#d1b045] border-[#f2ca50] text-[#131118] hover:text-[#131118]'"
+                    class="px-3 py-1.5 rounded-lg border transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-offset-bg-surface focus:ring-white/20 flex items-center justify-center gap-1.5 text-sm font-bold hover:-translate-y-0.5 active:scale-95"
+                    [title]="row.isActive ? 'Deactivate' : 'Activate'">
+              <span class="material-symbols-outlined text-[16px]">{{ row.isActive ? 'block' : 'check_circle' }}</span>
+              <span>{{ row.isActive ? 'Deactivate' : 'Activate' }}</span>
+            </button>
+            <button *ngIf="showEdit" (click)="edit.emit(row)" 
+                    class="text-accent-secondary hover:text-[#1a1400] bg-accent-secondary/10 hover:bg-accent-secondary border border-transparent hover:border-accent-secondary p-1.5 w-8 h-8 rounded-lg transition-all duration-200 shadow-[0_2px_8px_rgba(242,202,80,0.15)] hover:shadow-[0_4px_12px_rgba(242,202,80,0.3)] flex items-center justify-center hover:-translate-y-0.5 active:scale-95"
+                    title="Update">
+              <span class="material-symbols-outlined text-[18px]">edit</span>
+            </button>
+            <button *ngIf="showDelete" (click)="delete.emit(row)"
+                    class="text-error hover:text-white bg-error/10 hover:bg-error border border-transparent hover:border-error p-1.5 w-8 h-8 rounded-lg transition-all duration-200 shadow-[0_2px_8px_rgba(255,180,171,0.1)] hover:shadow-[0_4px_12px_rgba(255,180,171,0.25)] flex items-center justify-center hover:-translate-y-0.5 active:scale-95"
+                    title="Delete">
+              <span class="material-symbols-outlined text-[18px]">delete</span>
+            </button>
+            <ng-container *ngTemplateOutlet="actionsTemplate; context: { $implicit: row, row: row }"></ng-container>
+          </div>
+        </td>
+      </tr>
+      <tr *ngIf="data.length === 0">
+        <td [attr.colspan]="columns.length + (hasActions ? 1 : 0)" class="p-8 text-center text-text-muted">
+          No records found.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</div>

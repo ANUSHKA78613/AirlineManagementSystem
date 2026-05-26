@@ -1,0 +1,31 @@
+<aside class="fixed left-0 top-0 h-full w-64 flex flex-col z-50 bg-[#131313] md:dark:bg-[#0e0e0e] border-r border-[#f2ca50]/10 shadow-[4px_0_24px_rgba(0,0,0,0.5)] transition-transform sm:translate-x-0">
+  <div class="p-8">
+      <h1 class="text-xl font-serif italic text-[#f2ca50]">SkyHorizon {{ title === 'Dashboard' ? 'Admin' : title }}</h1>
+      <p class="text-[10px] uppercase tracking-[0.2em] text-[#d6c692]/50 mt-1">Celestial Control</p>
+  </div>
+  <nav class="flex-1 px-4 space-y-1">
+      <a *ngFor="let item of items" [routerLink]="item.route" routerLinkActive="bg-gradient-to-r from-[#f2ca50]/20 to-transparent text-[#f2ca50] border-l-4 border-[#f2ca50]"
+          class="flex items-center gap-3 px-4 py-3 text-[#d6c692]/60 hover:text-[#f2ca50] transition-colors hover:bg-[#f2ca50]/5 cursor-pointer">
+          <span class="material-symbols-outlined text-sm" [attr.data-icon]="item.icon">{{ item.icon }}</span>
+          <span class="text-xs font-label tracking-wider">{{ item.label }}</span>
+      </a>
+  </nav>
+  
+  <!-- Add additional info section at bottom for Admin/Dealers -->
+  <div class="px-8 mb-6" *ngIf="title === 'Admin'">
+      <button class="w-full py-3 bg-gradient-to-br from-[#f2ca50] to-[#d4af37] text-[#3c2f00] rounded-lg font-semibold text-xs tracking-wide shadow-[0_0_15px_rgba(242,202,80,0.3)] hover:scale-[1.02] transition-transform">
+          Generate Report
+      </button>
+  </div>
+
+  <div class="border-t border-[#f2ca50]/15 p-4 space-y-1">
+      <a class="flex items-center gap-3 px-4 py-2 text-[#d6c692]/60 hover:text-[#f2ca50] transition-colors cursor-pointer">
+          <span class="material-symbols-outlined text-sm" data-icon="help">help</span>
+          <span class="text-[10px] font-label uppercase tracking-widest">Support</span>
+      </a>
+      <a (click)="logout.emit()" class="flex items-center gap-3 px-4 py-2 text-error/60 hover:text-error transition-colors cursor-pointer">
+          <span class="material-symbols-outlined text-sm" data-icon="logout">logout</span>
+          <span class="text-[10px] font-label uppercase tracking-widest">Sign Out</span>
+      </a>
+  </div>
+</aside>

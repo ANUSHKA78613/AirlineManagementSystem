@@ -1,0 +1,847 @@
+<!-- Dark Gold SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-64 flex flex-col z-50 bg-[#131313] dark:bg-[#0e0e0e] border-r border-[#f2ca50]/10 shadow-[4px_0_24px_rgba(0,0,0,0.5)]">
+  <div class="p-8">
+    <h1 class="text-xl font-serif italic text-[#f2ca50]">SkyHorizon Admin</h1>
+    <p class="text-[10px] uppercase tracking-[0.2em] text-[#d6c692]/50 mt-1">Celestial Control</p>
+  </div>
+  <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
+    <button (click)="setTab('overview')" class="flex items-center gap-3 px-4 py-3 w-full text-left transition-colors"
+            [ngClass]="tab === 'overview' ? 'bg-gradient-to-r from-[#f2ca50]/20 to-transparent text-[#f2ca50] border-l-4 border-[#f2ca50]' : 'text-[#d6c692]/60 hover:text-[#f2ca50] hover:bg-[#f2ca50]/5'">
+      <span class="material-symbols-outlined text-sm">dashboard</span>
+      <span class="text-xs font-label tracking-wider">Dashboard</span>
+    </button>
+    <button (click)="setTab('flights')" class="flex items-center gap-3 px-4 py-3 w-full text-left transition-colors"
+            [ngClass]="tab === 'flights' ? 'bg-gradient-to-r from-[#f2ca50]/20 to-transparent text-[#f2ca50] border-l-4 border-[#f2ca50]' : 'text-[#d6c692]/60 hover:text-[#f2ca50] hover:bg-[#f2ca50]/5'">
+      <span class="material-symbols-outlined text-sm">flight_takeoff</span>
+      <span class="text-xs font-label tracking-wider">Flight Operations</span>
+    </button>
+    <button (click)="setTab('routes')" class="flex items-center gap-3 px-4 py-3 w-full text-left transition-colors"
+            [ngClass]="tab === 'routes' ? 'bg-gradient-to-r from-[#f2ca50]/20 to-transparent text-[#f2ca50] border-l-4 border-[#f2ca50]' : 'text-[#d6c692]/60 hover:text-[#f2ca50] hover:bg-[#f2ca50]/5'">
+      <span class="material-symbols-outlined text-sm">route</span>
+      <span class="text-xs font-label tracking-wider">Routes & Airports</span>
+    </button>
+    <button (click)="setTab('pricing')" class="flex items-center gap-3 px-4 py-3 w-full text-left transition-colors"
+            [ngClass]="tab === 'pricing' ? 'bg-gradient-to-r from-[#f2ca50]/20 to-transparent text-[#f2ca50] border-l-4 border-[#f2ca50]' : 'text-[#d6c692]/60 hover:text-[#f2ca50] hover:bg-[#f2ca50]/5'">
+      <span class="material-symbols-outlined text-sm">payments</span>
+      <span class="text-xs font-label tracking-wider">Pricing & Coupons</span>
+    </button>
+    <button (click)="setTab('users')" class="flex items-center gap-3 px-4 py-3 w-full text-left transition-colors"
+            [ngClass]="tab === 'users' ? 'bg-gradient-to-r from-[#f2ca50]/20 to-transparent text-[#f2ca50] border-l-4 border-[#f2ca50]' : 'text-[#d6c692]/60 hover:text-[#f2ca50] hover:bg-[#f2ca50]/5'">
+      <span class="material-symbols-outlined text-sm">group</span>
+      <span class="text-xs font-label tracking-wider">Users</span>
+    </button>
+    <button (click)="setTab('bookings')" class="flex items-center gap-3 px-4 py-3 w-full text-left transition-colors"
+            [ngClass]="tab === 'bookings' ? 'bg-gradient-to-r from-[#f2ca50]/20 to-transparent text-[#f2ca50] border-l-4 border-[#f2ca50]' : 'text-[#d6c692]/60 hover:text-[#f2ca50] hover:bg-[#f2ca50]/5'">
+      <span class="material-symbols-outlined text-sm">confirmation_number</span>
+      <span class="text-xs font-label tracking-wider">Bookings</span>
+    </button>
+    <button (click)="setTab('dealers')" class="flex items-center gap-3 px-4 py-3 w-full text-left transition-colors"
+            [ngClass]="tab === 'dealers' ? 'bg-gradient-to-r from-[#f2ca50]/20 to-transparent text-[#f2ca50] border-l-4 border-[#f2ca50]' : 'text-[#d6c692]/60 hover:text-[#f2ca50] hover:bg-[#f2ca50]/5'">
+      <span class="material-symbols-outlined text-sm">handshake</span>
+      <span class="text-xs font-label tracking-wider">Dealer Management</span>
+    </button>
+    <button (click)="setTab('commissions')" class="flex items-center gap-3 px-4 py-3 w-full text-left transition-colors"
+            [ngClass]="tab === 'commissions' ? 'bg-gradient-to-r from-[#f2ca50]/20 to-transparent text-[#f2ca50] border-l-4 border-[#f2ca50]' : 'text-[#d6c692]/60 hover:text-[#f2ca50] hover:bg-[#f2ca50]/5'">
+      <span class="material-symbols-outlined text-sm">percent</span>
+      <span class="text-xs font-label tracking-wider">Commissions</span>
+    </button>
+    <button (click)="setTab('aircraft')" class="flex items-center gap-3 px-4 py-3 w-full text-left transition-colors"
+            [ngClass]="tab === 'aircraft' ? 'bg-gradient-to-r from-[#f2ca50]/20 to-transparent text-[#f2ca50] border-l-4 border-[#f2ca50]' : 'text-[#d6c692]/60 hover:text-[#f2ca50] hover:bg-[#f2ca50]/5'">
+      <span class="material-symbols-outlined text-sm">flight</span>
+      <span class="text-xs font-label tracking-wider">Aircraft Metrics</span>
+    </button>
+  </nav>
+
+  <div class="border-t border-[#f2ca50]/15 p-4 space-y-1">
+    <a routerLink="/dealer" class="flex items-center gap-3 px-4 py-2 text-[#d6c692]/60 hover:text-[#f2ca50] transition-colors cursor-pointer">
+      <span class="material-symbols-outlined text-sm">storefront</span>
+      <span class="text-[10px] font-label uppercase tracking-widest">Dealer Portal</span>
+    </a>
+    <a routerLink="/staff" class="flex items-center gap-3 px-4 py-2 text-[#d6c692]/60 hover:text-[#f2ca50] transition-colors cursor-pointer">
+      <span class="material-symbols-outlined text-sm">badge</span>
+      <span class="text-[10px] font-label uppercase tracking-widest">Staff Portal</span>
+    </a>
+    <a (click)="auth.logout()" class="flex items-center gap-3 px-4 py-2 text-error/60 hover:text-error transition-colors cursor-pointer">
+      <span class="material-symbols-outlined text-sm">logout</span>
+      <span class="text-[10px] font-label uppercase tracking-widest">Sign Out</span>
+    </a>
+  </div>
+</aside>
+
+<!-- Main Canvas -->
+<main class="flex-1 ml-64 min-h-screen flex flex-col bg-surface">
+  <!-- TopNavBar -->
+  <header class="flex justify-between items-center w-full px-8 py-6 bg-[#131313]/40 backdrop-blur-xl z-40 sticky top-0">
+    <div class="flex items-center gap-8">
+      <h2 class="text-2xl font-serif italic text-[#f2ca50]">Flight Command</h2>
+      <nav class="hidden md:flex gap-6">
+        <a class="text-[#d6c692] hover:text-[#f2ca50] transition-colors duration-300 text-xs uppercase tracking-widest cursor-pointer font-bold" [class.text-[#f2ca50]]="tab === 'overview'" [class.border-b-2]="tab === 'overview'" [class.border-[#f2ca50]]="tab === 'overview'" [class.pb-1]="tab === 'overview'" (click)="setTab('overview')">Global Status</a>
+        <a class="text-[#d6c692] hover:text-[#f2ca50] transition-colors duration-300 text-xs uppercase tracking-widest cursor-pointer" (click)="setTab('flights')">Operations</a>
+      </nav>
+    </div>
+    <div class="flex items-center gap-6">
+      <div class="relative" (click)="$event.stopPropagation()">
+        <button class="relative cursor-pointer focus:outline-none" (click)="toggleNotifications()">
+          <span class="material-symbols-outlined text-[#d6c692] hover:text-[#f2ca50] transition-colors text-[22px]">notifications</span>
+          <span *ngIf="notifications.length > 0" class="absolute -top-1 -right-1 w-4 h-4 bg-error rounded-full ring-2 ring-[#131313] flex items-center justify-center text-[9px] text-white font-bold">
+            {{ notifications.length > 9 ? '9+' : notifications.length }}
+          </span>
+        </button>
+        <!-- Notification Dropdown -->
+        <div *ngIf="showNotifications" class="absolute top-10 right-0 w-80 bg-[#1c1c1e] border border-[#2e2e32] rounded-xl shadow-2xl z-50 overflow-hidden">
+          <div class="flex items-center justify-between px-4 py-3 border-b border-[#2e2e32]">
+            <span class="text-xs font-bold uppercase tracking-wider text-[#f2ca50]">Notifications</span>
+            <span class="text-[10px] text-text-muted">{{ notifications.length }} recent</span>
+          </div>
+          <div class="max-h-80 overflow-y-auto">
+            <div *ngIf="notifications.length === 0" class="px-4 py-8 text-center text-text-muted text-xs">No notifications yet</div>
+            <div *ngFor="let n of notifications.slice(0,10)" class="px-4 py-3 border-b border-[#2e2e32]/50 hover:bg-white/5 transition-colors cursor-default">
+              <div class="flex items-start gap-3">
+                <span class="material-symbols-outlined text-[16px] mt-0.5" [ngClass]="n.status === 'Sent' ? 'text-success' : n.status === 'Failed' ? 'text-error' : 'text-[#f2ca50]'">
+                  {{ n.status === 'Sent' ? 'mark_email_read' : n.status === 'Failed' ? 'error' : 'schedule' }}
+                </span>
+                <div class="flex-1 min-w-0">
+                  <p class="text-xs font-bold text-text-primary truncate">{{ n.subject }}</p>
+                  <p class="text-[11px] text-text-muted truncate">{{ n.email }}</p>
+                  <p class="text-[10px] text-text-muted mt-0.5">{{ n.createdAt | date:'short' }}</p>
+                </div>
+                <span class="text-[9px] px-1.5 py-0.5 rounded-full font-bold shrink-0"
+                      [ngClass]="n.status === 'Sent' ? 'bg-success/10 text-success' : n.status === 'Failed' ? 'bg-error/10 text-error' : 'bg-[#f2ca50]/10 text-[#f2ca50]'">
+                  {{ n.status }}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="px-4 py-2 border-t border-[#2e2e32] text-center">
+            <button class="text-[10px] text-[#f2ca50] hover:underline font-bold" (click)="setTab('overview'); showNotifications = false">View All in Dashboard</button>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 relative group">
+        <span class="text-[#d6c692] text-xs font-bold">{{ auth.currentUser?.name }}</span>
+        <div class="w-10 h-10 rounded-full flex items-center justify-center bg-primary/20 ring-2 ring-primary/30 cursor-pointer text-primary font-bold hover:bg-primary/30 transition-colors">
+          {{ auth.currentUser?.name?.charAt(0) | uppercase }}
+        </div>
+        <div class="absolute top-10 right-0 pt-2 hidden group-hover:block transition-all shadow-lg min-w-32 z-50">
+          <div class="bg-surface-container-high border border-outline-variant/30 rounded-xl p-2 bg-[#1e1e1e]">
+            <a routerLink="/profile" class="block px-3 py-2 text-on-surface-variant text-[#d6c692] text-xs hover:bg-white/5 rounded-md font-bold transition cursor-pointer">My Profile</a>
+            <button (click)="auth.logout()" class="w-full text-left px-3 py-2 text-error text-xs hover:bg-error/10 rounded-md font-bold transition">Sign Out</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Content -->
+  <div class="p-8 max-w-7xl mx-auto w-full">
+      
+      <!-- OVERVIEW TAB -->
+      <div *ngIf="tab === 'overview'" class="animate-fadeIn">
+        <div class="mb-8">
+          <h1 class="text-3xl font-bold font-outfit mb-2">Platform Overview</h1>
+          <p class="text-text-secondary">Real-time metrics and operational status</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <app-stats-card title="Total Revenue" [value]="'₹' + (totalRevenue | number:'1.0-0')" icon="currency_rupee" [trend]="12" trendLabel="vs last week" class="animate-fadeInUp delay-0"></app-stats-card>
+          <app-stats-card title="Unique Visitors" [value]="uniqueVisitors" icon="public" [trend]="8" trendLabel="active sessions" class="animate-fadeInUp delay-1"></app-stats-card>
+          <app-stats-card title="Active Flights" [value]="flights.length" icon="flight_takeoff" class="animate-fadeInUp delay-2"></app-stats-card>
+          <app-stats-card title="Total Bookings" [value]="bookings.length" icon="confirmation_number" [trend]="-2" trendLabel="vs yesterday" class="animate-fadeInUp delay-3"></app-stats-card>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="card p-6 h-80 flex flex-col border-t-2 border-t-accent-primary animate-fadeInUp delay-4">
+            <h3 class="font-bold mb-4 font-outfit">Revenue Trend</h3>
+            <div class="flex-1 flex items-end gap-2 pt-8 border-b border-border-color pb-1" *ngIf="trendData.length > 0">
+              <div *ngFor="let m of trendData; let i = index" 
+                   class="flex-1 rounded-t-sm transition-all cursor-pointer group relative hover:shadow-[0_0_15px_rgba(242,202,80,0.5)]" 
+                   [style.background-color]="i === 4 ? '#f2ca50' : 'rgba(242, 202, 80, ' + (0.2 + i * 0.2) + ')'"
+                   [style.height.%]="m.heightPercent">
+                <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-bg-surface px-2 py-1 rounded text-xs opacity-0 shadow-lg group-hover:opacity-100 font-mono z-10"
+                     [ngClass]="i === 4 ? 'text-accent-secondary' : ''">₹{{ m.amount }}</div>
+              </div>
+            </div>
+            <div class="flex justify-between text-xs text-text-muted mt-2 uppercase tracking-widest" *ngIf="trendData.length > 0">
+              <span *ngFor="let m of trendData">{{ m.dayName }}</span>
+            </div>
+          </div>
+          
+          <div class="card p-6 border-t-2 border-t-accent-secondary animate-fadeInUp delay-5 overflow-hidden">
+            <h3 class="font-bold mb-4 font-outfit">Recent Bookings</h3>
+            <div class="space-y-4">
+              <div *ngIf="recentBookings.length === 0" class="text-center py-6 text-text-muted text-sm font-outfit">
+                No recent bookings today
+              </div>
+              <div *ngFor="let b of recentBookings" class="flex justify-between items-center bg-bg-glass p-3 rounded border border-border-color">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-full flex items-center justify-center"
+                       [class.bg-success]="b.status !== 'Cancelled'" [class.bg-opacity-20]="b.status !== 'Cancelled'" [class.text-success]="b.status !== 'Cancelled'"
+                       [class.bg-error]="b.status === 'Cancelled'" [class.bg-opacity-20]="b.status === 'Cancelled'" [class.text-error]="b.status === 'Cancelled'">
+                    <span class="material-symbols-outlined">{{ b.status === 'Cancelled' ? 'cancel' : 'check_circle' }}</span>
+                  </div>
+                  <div>
+                    <div class="font-bold font-mono tracking-widest text-sm" [class.line-through]="b.status === 'Cancelled'">{{ b.pnr }}</div>
+                    <div class="text-xs text-text-secondary">{{ b.flightId ? 'Flight ' + b.flightId : 'Pending' }} • {{ (b.bookingDate || b.createdAt) | date:'shortTime' }}</div>
+                  </div>
+                </div>
+                <div class="font-bold font-outfit text-lg" [class.text-success]="b.status !== 'Cancelled'" [class.text-text-muted]="b.status === 'Cancelled'">
+                  ₹{{ b.totalAmount }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- FLIGHTS TAB -->
+      <div *ngIf="tab === 'flights'" class="animate-fadeIn">
+        <div class="flex justify-between items-end mb-8">
+          <div>
+            <h1 class="text-3xl font-bold font-outfit mb-2">Flight Management</h1>
+            <p class="text-text-secondary">Schedule and monitor commercial flights</p>
+          </div>
+          <button class="btn btn-primary shadow-glow" (click)="openFlightDrawer()">
+            <span class="material-symbols-outlined">add</span> Schedule Flight
+          </button>
+        </div>
+
+        <app-data-table [columns]="flightColumns" [data]="flights" [loading]="loading"
+                        [showEdit]="true" [showDelete]="true"
+                        (edit)="onEditFlight($event)" (delete)="onDeleteFlight($event)">
+        </app-data-table>
+      </div>
+
+
+      <!-- ROUTES & AIRPORTS TAB -->
+      <div *ngIf="tab === 'routes'" class="animate-fadeIn">
+        <div class="flex justify-between items-end mb-8">
+          <div>
+            <h1 class="text-3xl font-bold font-outfit mb-2">Routes & Airports</h1>
+            <p class="text-text-secondary">Manage flight routes and airport registry</p>
+          </div>
+          <div class="flex gap-3">
+            <button class="btn btn-secondary" (click)="showAddAirport = !showAddAirport">
+              <span class="material-symbols-outlined">apartment</span> Add Airport
+            </button>
+            <button class="btn btn-primary shadow-glow" (click)="showAddRoute = !showAddRoute">
+              <span class="material-symbols-outlined">add</span> Add Route
+            </button>
+          </div>
+        </div>
+
+        @if (showAddRoute) {
+          <div class="card p-6 mb-6 animate-fadeInUp border-l-4 border-l-accent-primary">
+            <h3 class="font-bold font-outfit mb-4">New Route</h3>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <select class="form-control bg-bg-card border-border-color text-text-primary" [(ngModel)]="newRoute.source">
+                <option [ngValue]="undefined" disabled selected>Select Source</option>
+                <option *ngFor="let a of airports" [value]="a.code">{{ a.code }} - {{ a.name }}</option>
+              </select>
+              <select class="form-control bg-bg-card border-border-color text-text-primary" [(ngModel)]="newRoute.destination">
+                <option [ngValue]="undefined" disabled selected>Select Destination</option>
+                <option *ngFor="let a of airports" [value]="a.code">{{ a.code }} - {{ a.name }}</option>
+              </select>
+              <input type="number" class="form-control" [(ngModel)]="newRoute.distanceKm" placeholder="Distance (km)">
+              <input type="text" class="form-control" [(ngModel)]="newRoute.estimatedDuration" placeholder="Duration (e.g. 02:00)">
+            </div>
+            <div class="flex gap-3 mt-4">
+              <button class="btn btn-secondary" (click)="showAddRoute = false">Cancel</button>
+              <button class="btn btn-primary" (click)="addRoute()" [disabled]="!newRoute.source || !newRoute.destination">Save Route</button>
+            </div>
+          </div>
+        }
+
+        @if (showEditRoute) {
+          <div class="card p-6 mb-6 animate-fadeInUp border-l-4 border-l-accent-primary bg-[#1e1e1e]">
+            <h3 class="font-bold font-outfit mb-4">Edit Route</h3>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <input type="text" class="form-control" [(ngModel)]="editingRoute.source" placeholder="Source (e.g. DEL)" disabled>
+              <input type="text" class="form-control" [(ngModel)]="editingRoute.destination" placeholder="Destination (e.g. BOM)" disabled>
+              <input type="number" class="form-control" [(ngModel)]="editingRoute.distanceKm" placeholder="Distance (km)">
+              <input type="text" class="form-control" [(ngModel)]="editingRoute.estimatedDuration" placeholder="Duration (e.g. 02:00)">
+            </div>
+            <div class="flex gap-3 mt-4">
+              <button class="btn btn-secondary" (click)="showEditRoute = false">Cancel</button>
+              <button class="btn btn-primary" (click)="updateRoute()">Update Route</button>
+            </div>
+          </div>
+        }
+
+        @if (showAddAirport) {
+          <div class="card p-6 mb-6 animate-fadeInUp border-l-4 border-l-accent-secondary">
+            <h3 class="font-bold font-outfit mb-4">New Airport</h3>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <input type="text" class="form-control" [(ngModel)]="newAirport.code" placeholder="Code (e.g. DEL)">
+              <input type="text" class="form-control" [(ngModel)]="newAirport.name" placeholder="Airport Name">
+              <input type="text" class="form-control" [(ngModel)]="newAirport.city" placeholder="City">
+              <input type="text" class="form-control" [(ngModel)]="newAirport.country" placeholder="Country">
+            </div>
+            <div class="flex gap-3 mt-4">
+              <button class="btn btn-secondary" (click)="showAddAirport = false">Cancel</button>
+              <button class="btn btn-primary" (click)="addAirport()" [disabled]="!newAirport.code || !newAirport.name">Save Airport</button>
+            </div>
+          </div>
+        }
+
+        @if (showEditAirport) {
+          <div class="card p-6 mb-6 animate-fadeInUp border-l-4 border-l-accent-secondary bg-[#1e1e1e]">
+            <h3 class="font-bold font-outfit mb-4">Edit Airport</h3>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <input type="text" class="form-control" [(ngModel)]="editingAirport.code" placeholder="Code (e.g. DEL)" disabled>
+              <input type="text" class="form-control" [(ngModel)]="editingAirport.name" placeholder="Airport Name">
+              <input type="text" class="form-control" [(ngModel)]="editingAirport.city" placeholder="City">
+              <input type="text" class="form-control" [(ngModel)]="editingAirport.country" placeholder="Country">
+            </div>
+            <div class="flex gap-3 mt-4">
+              <button class="btn btn-secondary" (click)="showEditAirport = false">Cancel</button>
+              <button class="btn btn-primary" (click)="updateAirport()">Update Airport</button>
+            </div>
+          </div>
+        }
+
+        <h3 class="font-bold font-outfit mb-3 text-lg">Active Routes</h3>
+        <app-data-table [columns]="routeColumns" [data]="routes" [loading]="loading"
+                        [showEdit]="true" [showDelete]="true"
+                        (edit)="onEditRoute($event)" (delete)="onDeleteRoute($event)">
+        </app-data-table>
+
+        <h3 class="font-bold font-outfit mb-3 mt-8 text-lg">Airport Registry</h3>
+        <app-data-table [columns]="airportColumns" [data]="airports" [loading]="loading"
+                        [showEdit]="true" [showDelete]="true"
+                        (edit)="onEditAirport($event)" (delete)="onDeleteAirport($event)">
+        </app-data-table>
+      </div>
+
+
+      <!-- PRICING & COUPONS TAB -->
+      <div *ngIf="tab === 'pricing'" class="animate-fadeIn">
+        <div class="flex justify-between items-end mb-8">
+          <div>
+            <h1 class="text-3xl font-bold font-outfit mb-2">Pricing & Coupons</h1>
+            <p class="text-text-secondary">Dynamic pricing rules and promotional coupons</p>
+          </div>
+          <div class="flex gap-3">
+            <button class="btn btn-primary shadow-glow" (click)="showAddCoupon = !showAddCoupon">
+              <span class="material-symbols-outlined">confirmation_number</span> Add Coupon
+            </button>
+          </div>
+        </div>
+
+
+
+        @if (showAddCoupon) {
+          <div class="card p-6 mb-6 animate-fadeInUp border-l-4 border-l-accent-secondary">
+            <h3 class="font-bold font-outfit mb-4">New Coupon</h3>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <input type="text" class="form-control" [(ngModel)]="newCoupon.code" placeholder="Code (e.g. FESTIVAL20)">
+              <input type="number" class="form-control" [(ngModel)]="newCoupon.discountPercent" placeholder="Discount %" max="100">
+              <input type="number" class="form-control" [(ngModel)]="newCoupon.usageLimit" placeholder="Usage Limit">
+              <input type="datetime-local" class="form-control" [(ngModel)]="newCoupon.expiresAt">
+            </div>
+            <div class="flex gap-3 mt-4">
+              <button class="btn btn-secondary" (click)="showAddCoupon = false">Cancel</button>
+              <button class="btn btn-primary" (click)="addCoupon()" [disabled]="!newCoupon.code">Create Coupon</button>
+            </div>
+          </div>
+        }
+
+
+
+        @if (showEditCoupon) {
+          <div class="card p-6 mb-6 animate-fadeInUp border-l-4 border-l-accent-secondary">
+            <h3 class="font-bold font-outfit mb-4">Edit Coupon</h3>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <input type="text" class="form-control" [(ngModel)]="editingCoupon.code" placeholder="Code (e.g. FESTIVAL20)">
+              <input type="number" class="form-control" [(ngModel)]="editingCoupon.discountPercent" placeholder="Discount %" max="100">
+              <input type="number" class="form-control" [(ngModel)]="editingCoupon.usageLimit" placeholder="Usage Limit">
+              <input type="datetime-local" class="form-control" [(ngModel)]="editingCoupon.expiresAt">
+            </div>
+            <div class="flex gap-3 mt-4">
+              <button class="btn btn-secondary" (click)="showEditCoupon = false">Cancel</button>
+              <button class="btn btn-primary" (click)="updateCoupon()" [disabled]="!editingCoupon.code">Update Coupon</button>
+            </div>
+          </div>
+        }
+
+
+
+
+
+        <h3 class="font-bold font-outfit mb-3 text-lg mt-8">Promotional Coupons</h3>
+        <app-data-table [columns]="couponColumns" [data]="coupons" [loading]="loading"
+                        [showEdit]="true" [showDelete]="true" [showToggle]="true"
+                        (edit)="onEditCoupon($event)" (delete)="onDeleteCoupon($event)" (toggleState)="toggleCoupon($event)">
+        </app-data-table>
+      </div>
+
+
+      <!-- USERS TAB -->
+      <div *ngIf="tab === 'users'" class="animate-fadeIn">
+        <div class="mb-8">
+          <h1 class="text-3xl font-bold font-outfit mb-2">Global Users</h1>
+          <p class="text-text-secondary">Approve, block, and manage access</p>
+        </div>
+
+        <app-data-table [columns]="userColumns" [data]="users" [loading]="loading"
+                        [showEdit]="false" [showDelete]="false"
+                        (edit)="onEditUser($event)" (delete)="onDeleteUser($event)"
+                        [actionsTemplate]="userActions">
+        </app-data-table>
+        <ng-template #userActions let-u>
+          <div class="flex justify-end gap-2 items-center">
+            <button class="px-3 py-1.5 rounded-lg border border-border-color bg-bg-glass text-text-secondary hover:bg-accent-secondary/10 hover:text-accent-secondary hover:border-accent-secondary transition-all duration-200 text-xs font-bold flex items-center gap-1.5 hover:-translate-y-0.5 active:scale-95"
+                    (click)="viewUserDetails(u)">
+              <span class="material-symbols-outlined text-[14px]">visibility</span>
+              Details
+            </button>
+            <button class="px-3 py-1.5 rounded-lg border transition-all duration-200 text-xs font-bold flex items-center gap-1.5 hover:-translate-y-0.5 active:scale-95"
+                    [ngClass]="u.isBlocked ? 'bg-[#f2ca50] hover:bg-[#d1b045] border-[#f2ca50] text-[#131118]' : 'bg-[#131118] hover:bg-black border-[#131118] text-[#f2ca50]'"
+                    (click)="toggleBlock(u)">
+              <span class="material-symbols-outlined text-[14px]">{{ u.isBlocked ? 'check_circle' : 'block' }}</span>
+              {{ u.isBlocked ? 'Unblock' : 'Block' }}
+            </button>
+          </div>
+        </ng-template>
+
+        @if (selectedUser) {
+          <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fadeIn" (click)="selectedUser = null">
+            <div class="bg-[#1c1c1e] border border-[#2e2e32] rounded-2xl shadow-2xl p-8 w-full max-w-lg animate-fadeInUp" (click)="$event.stopPropagation()">
+              <div class="flex justify-between items-center mb-6">
+                <h3 class="font-bold font-outfit text-xl text-accent-secondary">User Details</h3>
+                <button class="w-8 h-8 rounded-lg bg-bg-glass hover:bg-error/10 hover:text-error text-text-muted transition-all flex items-center justify-center" (click)="selectedUser = null">
+                  <span class="material-symbols-outlined text-[20px]">close</span>
+                </button>
+              </div>
+              <div class="grid grid-cols-2 gap-x-6 gap-y-5 text-sm">
+                <div><span class="text-text-muted block text-xs uppercase tracking-wider mb-1">User ID</span><span class="font-bold text-text-primary">{{ selectedUser.userId }}</span></div>
+                <div><span class="text-text-muted block text-xs uppercase tracking-wider mb-1">Name</span><span class="font-bold text-text-primary">{{ selectedUser.name }}</span></div>
+                <div><span class="text-text-muted block text-xs uppercase tracking-wider mb-1">Email</span><span class="font-bold text-text-primary">{{ selectedUser.email }}</span></div>
+                <div><span class="text-text-muted block text-xs uppercase tracking-wider mb-1">Role</span><span class="font-bold text-text-primary">{{ selectedUser.role }}</span></div>
+                <div><span class="text-text-muted block text-xs uppercase tracking-wider mb-1">Phone</span><span class="font-bold text-text-primary">{{ selectedUser.phone || 'N/A' }}</span></div>
+                <div><span class="text-text-muted block text-xs uppercase tracking-wider mb-1">Status</span>
+                  <span class="px-2.5 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1.5" [ngClass]="selectedUser.isBlocked ? 'bg-error/10 text-error' : 'bg-success/10 text-success'">
+                    <span class="w-1.5 h-1.5 rounded-full" [ngClass]="selectedUser.isBlocked ? 'bg-error' : 'bg-success'"></span>
+                    {{ selectedUser.isBlocked ? 'Blocked' : 'Active' }}
+                  </span>
+                </div>
+                <div class="col-span-2"><span class="text-text-muted block text-xs uppercase tracking-wider mb-1">Created At</span><span class="font-bold text-text-primary">{{ selectedUser.createdAt | date:'medium' }}</span></div>
+              </div>
+              <div class="mt-6 flex justify-end">
+                <button class="px-4 py-2 rounded-lg bg-bg-glass border border-border-color text-text-secondary hover:text-text-primary hover:border-accent-secondary transition-all text-sm font-bold" (click)="selectedUser = null">Close</button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+      
+      <!-- BOOKINGS TAB -->
+      <div *ngIf="tab === 'bookings'" class="animate-fadeIn">
+        <div class="mb-8">
+          <h1 class="text-3xl font-bold font-outfit mb-2">Monitor Bookings</h1>
+          <p class="text-text-secondary">Override & View User Transactions</p>
+        </div>
+        <app-data-table [columns]="bookingColumns" [data]="bookings" [loading]="loading"
+                        [showEdit]="false" [showDelete]="false"
+                        (edit)="onEditBooking($event)" (delete)="onDeleteBooking($event)"
+                        [actionsTemplate]="bookingActions">
+        </app-data-table>
+        <ng-template #bookingActions let-b>
+          <div class="flex justify-end gap-2 items-center">
+            <button *ngIf="b.status === 'Confirmed'" 
+                    class="px-3 py-1.5 rounded-lg border border-error/30 bg-error/10 text-error hover:bg-error hover:text-white hover:border-error transition-all duration-200 text-xs font-bold flex items-center gap-1.5 hover:-translate-y-0.5 active:scale-95 shadow-sm"
+                    (click)="cancelBookingWithRefund(b.pnr)">
+              <span class="material-symbols-outlined text-[14px]">cancel</span>
+              Cancel & Refund
+            </button>
+            <span *ngIf="b.status === 'Cancelled'" class="text-text-muted text-xs italic">Cancelled</span>
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- DEALERS TAB -->
+      <div *ngIf="tab === 'dealers'" class="animate-fadeIn">
+        <div class="flex justify-between items-end mb-8">
+          <div>
+            <h1 class="text-3xl font-bold font-outfit mb-2">Dealer Management</h1>
+            <p class="text-text-secondary">Register, approve, and manage travel agents</p>
+          </div>
+          <button class="btn btn-primary shadow-glow" (click)="showAddDealer = !showAddDealer">
+            <span class="material-symbols-outlined">add</span> Register Dealer
+          </button>
+        </div>
+
+        @if (showAddDealer) {
+          <div class="card p-6 mb-6 animate-fadeInUp border-l-4 border-l-accent-primary">
+            <h3 class="font-bold font-outfit mb-4">Register New Dealer</h3>
+            <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
+              <input type="text" class="form-control" [(ngModel)]="newDealer.agentName" placeholder="Agent Name">
+              <input type="text" class="form-control" [(ngModel)]="newDealer.agencyName" placeholder="Agency Name">
+              <input type="text" class="form-control" [(ngModel)]="newDealer.agentCode" placeholder="Agent Code">
+              <input type="email" class="form-control" [(ngModel)]="newDealer.email" placeholder="Email">
+              <input type="tel" class="form-control" [(ngModel)]="newDealer.phone" placeholder="Phone">
+              <input type="number" class="form-control" [(ngModel)]="newDealer.commissionRate" placeholder="Commission % (e.g. 30)" step="0.5">
+            </div>
+            <div class="flex gap-3 mt-4">
+              <button class="btn btn-secondary" (click)="showAddDealer = false">Cancel</button>
+              <button class="btn btn-primary" (click)="registerDealer()" [disabled]="!newDealer.agentName || !newDealer.agencyName">Register</button>
+            </div>
+          </div>
+        }
+
+        @if (showEditDealer) {
+          <div class="card p-6 mb-6 animate-fadeInUp border-l-4 border-l-accent-secondary bg-[#1e1e1e]">
+            <h3 class="font-bold font-outfit mb-4">Edit Dealer: {{ editingDealer.agentName }}</h3>
+            <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
+              <input type="text" class="form-control" [(ngModel)]="editingDealer.agentName" placeholder="Agent Name">
+              <input type="text" class="form-control" [(ngModel)]="editingDealer.agencyName" placeholder="Agency Name">
+              <input type="text" class="form-control" [(ngModel)]="editingDealer.agentCode" placeholder="Agent Code" disabled>
+              <input type="email" class="form-control" [(ngModel)]="editingDealer.email" placeholder="Email">
+              <input type="tel" class="form-control" [(ngModel)]="editingDealer.phone" placeholder="Phone">
+              <input type="number" class="form-control" [(ngModel)]="editingDealer.commissionRate" placeholder="Commission % (e.g. 30)" step="0.5">
+            </div>
+            <div class="flex gap-3 mt-4">
+              <button class="btn btn-secondary" (click)="showEditDealer = false">Cancel</button>
+              <button class="btn btn-primary" (click)="updateDealer()">Update Dealer</button>
+            </div>
+          </div>
+        }
+
+        <app-data-table [columns]="dealerColumns" [data]="dealers" [loading]="loading"
+                        [showEdit]="false" [showDelete]="false"
+                        (edit)="onEditDealer($event)" (delete)="onDeleteDealer($event)"
+                        [actionsTemplate]="dealerActions">
+        </app-data-table>
+        <ng-template #dealerActions let-d>
+          <div class="flex justify-end gap-2 items-center">
+            <button class="px-3 py-1.5 rounded-lg border transition-all duration-200 text-xs font-bold flex items-center gap-1.5 hover:-translate-y-0.5 active:scale-95"
+                    [ngClass]="d.isActive ? 'bg-[#131118] hover:bg-black border-[#131118] text-[#f2ca50]' : 'bg-[#f2ca50] hover:bg-[#d1b045] border-[#f2ca50] text-[#131118]'"
+                    (click)="toggleDealerStatus(d)">
+              <span class="material-symbols-outlined text-[14px]">{{ d.isActive ? 'block' : 'check_circle' }}</span>
+              {{ d.isActive ? 'Deactivate' : 'Activate' }}
+            </button>
+            <button class="text-accent-secondary hover:text-[#1a1400] bg-accent-secondary/10 hover:bg-accent-secondary border border-transparent hover:border-accent-secondary p-1.5 w-8 h-8 rounded-lg transition-all duration-200 shadow-[0_2px_8px_rgba(242,202,80,0.15)] hover:shadow-[0_4px_12px_rgba(242,202,80,0.3)] flex items-center justify-center hover:-translate-y-0.5 active:scale-95"
+                    title="Update" (click)="onEditDealer(d)">
+              <span class="material-symbols-outlined text-[18px]">edit</span>
+            </button>
+            <button class="text-error hover:text-white bg-error/10 hover:bg-error border border-transparent hover:border-error p-1.5 w-8 h-8 rounded-lg transition-all duration-200 shadow-[0_2px_8px_rgba(255,180,171,0.1)] hover:shadow-[0_4px_12px_rgba(255,180,171,0.25)] flex items-center justify-center hover:-translate-y-0.5 active:scale-95"
+                    title="Delete" (click)="onDeleteDealer(d)">
+              <span class="material-symbols-outlined text-[18px]">delete</span>
+            </button>
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- COMMISSIONS TAB -->
+      <div *ngIf="tab === 'commissions'" class="animate-fadeIn">
+        <div class="mb-8">
+          <h1 class="text-3xl font-bold font-outfit mb-2">Commission Tracker</h1>
+          <p class="text-text-secondary">Track, pay, and reverse agent commissions</p>
+        </div>
+
+        <app-data-table [columns]="commissionColumns" [data]="commissions" [loading]="loading"
+                        [showEdit]="false" [showDelete]="false">
+        </app-data-table>
+      </div>
+
+      <!-- AIRCRAFT METRICS TAB -->
+      <div *ngIf="tab === 'aircraft'" class="animate-fadeIn">
+        <div class="mb-8">
+          <h1 class="text-3xl font-bold font-outfit mb-2">Aircraft Conflict Metrics</h1>
+          <p class="text-text-secondary">Detect overlapping flights for the same aircraft type (includes 30-min turnaround buffer)</p>
+        </div>
+
+        @if (loading) {
+          <div class="flex items-center justify-center py-20">
+            <div class="w-8 h-8 border-2 border-accent-primary border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        } @else if (overlappingFlights.length === 0) {
+          <div class="card p-8 text-center border-l-4 border-l-success">
+            <div class="text-5xl mb-4">✅</div>
+            <h3 class="text-xl font-bold font-outfit mb-2">No Conflicts Detected</h3>
+            <p class="text-text-secondary">All aircraft schedules are clear with adequate turnaround time.</p>
+          </div>
+        } @else {
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            @for (conflict of overlappingFlights; track $index) {
+              <div class="card p-6 border-l-4 animate-fadeInUp"
+                   [class.border-l-error]="conflict.severity === 'critical'"
+                   [class.border-l-yellow-500]="conflict.severity === 'warning'">
+                <div class="flex justify-between items-start mb-4">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center text-white"
+                         [class.bg-error]="conflict.severity === 'critical'"
+                         [class.bg-yellow-500]="conflict.severity === 'warning'">
+                      <span class="material-symbols-outlined">warning</span>
+                    </div>
+                    <div>
+                      <div class="font-bold font-outfit">{{ conflict.aircraft }}</div>
+                      <div class="text-xs text-text-muted uppercase tracking-wider">{{ conflict.severity }} overlap</div>
+                    </div>
+                  </div>
+                  <span class="badge px-3 py-1 text-xs font-bold"
+                        [class.badge-error]="conflict.severity === 'critical'"
+                        [class.badge-warning]="conflict.severity === 'warning'">
+                    {{ conflict.overlapMinutes }}min conflict
+                  </span>
+                </div>
+
+                <div class="space-y-3">
+                  <div class="bg-bg-glass rounded-lg p-3 flex justify-between items-center">
+                    <span class="font-bold font-mono text-sm">{{ conflict.flight1 }}</span>
+                    <span class="text-xs text-text-secondary">{{ conflict.flight1Time | date:'HH:mm dd MMM' }}</span>
+                  </div>
+                  <div class="text-center text-text-muted text-xs">
+                    <span class="material-symbols-outlined text-[14px]">swap_vert</span> OVERLAPS WITH
+                  </div>
+                  <div class="bg-bg-glass rounded-lg p-3 flex justify-between items-center">
+                    <span class="font-bold font-mono text-sm">{{ conflict.flight2 }}</span>
+                    <span class="text-xs text-text-secondary">{{ conflict.flight2Time | date:'HH:mm dd MMM' }}</span>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+    </div>
+  </main>
+
+<!-- SLIDE-OVER DRAWER FOR ADD FLIGHT -->
+@if (showAddFlight) {
+  <div class="fixed inset-0 z-50 overflow-hidden" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
+    <div class="absolute inset-0 bg-bg-primary/80 backdrop-blur-sm transition-opacity" (click)="showAddFlight = false"></div>
+    <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+      <div class="pointer-events-auto w-screen max-w-md animate-slideInRight">
+        <div class="flex h-full flex-col bg-bg-card border-l border-border-color shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+          <div class="flex items-center justify-between px-6 py-4 border-b border-border-color bg-bg-surface">
+            <h2 class="text-xl font-bold font-outfit" id="slide-over-title">Schedule New Flight</h2>
+            <button class="text-text-secondary hover:text-white transition-colors" (click)="showAddFlight = false">
+              <span class="material-symbols-outlined">close</span>
+            </button>
+          </div>
+          
+          <div class="relative flex-1 px-6 py-6 overflow-y-auto space-y-6">
+            <div class="form-group mb-0">
+              <label class="text-xs font-bold uppercase tracking-wider text-text-muted mb-2 block">Flight Number</label>
+              <input type="text" class="form-control" [(ngModel)]="newFlight.flightNumber" placeholder="SKY504">
+            </div>
+
+            <div class="form-group mb-0">
+              <label class="text-xs font-bold uppercase tracking-wider text-text-muted mb-2 block">Airline & Aircraft</label>
+              <div class="grid grid-cols-2 gap-4">
+                <input type="text" class="form-control" [(ngModel)]="newFlight.airline" placeholder="Airline">
+                <input type="text" class="form-control" [(ngModel)]="newFlight.aircraftType" placeholder="Boeing 737">
+              </div>
+            </div>
+
+            <div class="form-group mb-0">
+              <label class="text-xs font-bold uppercase tracking-wider text-text-muted mb-2 block">Route</label>
+              <div class="grid grid-cols-2 gap-4 items-center">
+                <select class="form-control bg-bg-card border-border-color text-text-primary" [(ngModel)]="newFlight.source">
+                  <option [ngValue]="undefined" disabled selected>Select Source</option>
+                  <option *ngFor="let a of airports" [value]="a.code">{{ a.code }} - {{ a.name }}</option>
+                </select>
+                <select class="form-control bg-bg-card border-border-color text-text-primary" [(ngModel)]="newFlight.destination">
+                  <option [ngValue]="undefined" disabled selected>Select Destination</option>
+                  <option *ngFor="let a of airports" [value]="a.code">{{ a.code }} - {{ a.name }}</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group mb-0 border border-border-color rounded-lg p-3 bg-bg-surface/50">
+              <label class="text-xs font-bold uppercase tracking-wider text-text-muted mb-2 block border-b border-border-color pb-2">Economy Class</label>
+              <div class="grid grid-cols-2 gap-4 mt-2">
+                <div>
+                  <label class="text-[10px] text-text-muted mb-1 block">Seats</label>
+                  <input type="number" class="form-control text-sm py-1.5" [(ngModel)]="newFlight.economySeats" placeholder="120">
+                </div>
+                <div>
+                  <label class="text-[10px] text-text-muted mb-1 block">Price (₹)</label>
+                  <input type="number" class="form-control text-sm py-1.5 text-success font-bold" [(ngModel)]="newFlight.economyPrice" placeholder="5500">
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group mb-0 border border-border-color rounded-lg p-3 bg-bg-surface/50">
+              <label class="text-xs font-bold uppercase tracking-wider text-text-muted mb-2 block border-b border-border-color pb-2">Business Class</label>
+              <div class="grid grid-cols-2 gap-4 mt-2">
+                <div>
+                  <label class="text-[10px] text-text-muted mb-1 block">Seats</label>
+                  <input type="number" class="form-control text-sm py-1.5" [(ngModel)]="newFlight.businessSeats" placeholder="40">
+                </div>
+                <div>
+                  <label class="text-[10px] text-text-muted mb-1 block">Price (₹)</label>
+                  <input type="number" class="form-control text-sm py-1.5 text-success font-bold" [(ngModel)]="newFlight.businessPrice" placeholder="15000">
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group mb-0 border border-border-color rounded-lg p-3 bg-bg-surface/50">
+              <label class="text-xs font-bold uppercase tracking-wider text-text-muted mb-2 block border-b border-border-color pb-2">First Class</label>
+              <div class="grid grid-cols-2 gap-4 mt-2">
+                <div>
+                  <label class="text-[10px] text-text-muted mb-1 block">Seats</label>
+                  <input type="number" class="form-control text-sm py-1.5" [(ngModel)]="newFlight.firstClassSeats" placeholder="20">
+                </div>
+                <div>
+                  <label class="text-[10px] text-text-muted mb-1 block">Price (₹)</label>
+                  <input type="number" class="form-control text-sm py-1.5 text-success font-bold" [(ngModel)]="newFlight.firstClassPrice" placeholder="35000">
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group mb-0 border border-border-color rounded-lg p-3 bg-bg-surface/50">
+              <label class="text-xs font-bold uppercase tracking-wider text-text-muted mb-2 block border-b border-border-color pb-2">Seat Add-ons</label>
+              <div class="grid grid-cols-2 gap-4 mt-2">
+                <div>
+                  <label class="text-[10px] text-text-muted mb-1 block">Window Seat Plus (₹)</label>
+                  <input type="number" class="form-control text-sm py-1.5 text-success font-bold" [(ngModel)]="newFlight.windowSeatPrice" placeholder="1000">
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group mb-0">
+              <label class="text-xs font-bold uppercase tracking-wider text-text-muted mb-2 block">Timings</label>
+              <div class="grid grid-rows-2 gap-4">
+                <input type="datetime-local" class="form-control" [(ngModel)]="newFlight.departureTime" [min]="minDateTime">
+                <input type="datetime-local" class="form-control" [(ngModel)]="newFlight.arrivalTime" [min]="newFlight.departureTime || minDateTime">
+              </div>
+            </div>
+
+            <div class="form-group mb-0">
+              <label class="text-xs font-bold uppercase tracking-wider text-text-muted mb-2 block">Total Capacity</label>
+              <input type="number" class="form-control" [(ngModel)]="newFlight.totalCapacity" placeholder="180">
+            </div>
+          </div>
+
+          <div class="flex p-6 border-t border-border-color bg-bg-surface gap-4">
+            <button class="btn btn-secondary flex-1" (click)="showAddFlight = false">Cancel</button>
+            <button class="btn btn-primary flex-1 shadow-glow" (click)="addFlight()" [disabled]="!newFlight.flightNumber || !newFlight.source || !newFlight.destination || !newFlight.departureTime || !newFlight.arrivalTime || !newFlight.totalCapacity || !newFlight.economyPrice">
+              Deploy Flight ✈️
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- SLIDE-OVER DRAWER FOR EDIT FLIGHT -->
+@if (showEditFlight) {
+  <div class="fixed inset-0 z-50 overflow-hidden" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
+    <div class="absolute inset-0 bg-bg-primary/80 backdrop-blur-sm transition-opacity" (click)="showEditFlight = false"></div>
+    <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+      <div class="pointer-events-auto w-screen max-w-md animate-slideInRight">
+        <div class="flex h-full flex-col bg-bg-card border-l border-border-color shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+          <div class="flex items-center justify-between px-6 py-4 border-b border-border-color bg-bg-surface">
+            <h2 class="text-xl font-bold font-outfit" id="slide-over-title">Edit Flight {{ editingFlight.flightNumber }}</h2>
+            <button class="text-text-secondary hover:text-white transition-colors" (click)="showEditFlight = false">
+              <span class="material-symbols-outlined">close</span>
+            </button>
+          </div>
+          
+          <div class="relative flex-1 px-6 py-6 overflow-y-auto space-y-6">
+            <div class="form-group mb-0">
+              <label class="text-xs font-bold uppercase tracking-wider text-text-muted mb-2 block">Flight Number</label>
+              <input type="text" class="form-control" [(ngModel)]="editingFlight.flightNumber" placeholder="SKY504" disabled>
+            </div>
+
+            <div class="form-group mb-0">
+              <label class="text-xs font-bold uppercase tracking-wider text-text-muted mb-2 block">Airline & Aircraft</label>
+              <div class="grid grid-cols-2 gap-4">
+                <input type="text" class="form-control" [(ngModel)]="editingFlight.airline" placeholder="Airline">
+                <input type="text" class="form-control" [(ngModel)]="editingFlight.aircraftType" placeholder="Boeing 737">
+              </div>
+            </div>
+
+            <div class="form-group mb-0 border border-border-color rounded-lg p-3 bg-bg-surface/50">
+              <label class="text-xs font-bold uppercase tracking-wider text-text-muted mb-2 block border-b border-border-color pb-2">Economy Class</label>
+              <div class="grid grid-cols-2 gap-4 mt-2">
+                <div>
+                  <label class="text-[10px] text-text-muted mb-1 block">Seats</label>
+                  <input type="number" class="form-control text-sm py-1.5" [(ngModel)]="editingFlight.economySeats" placeholder="120">
+                </div>
+                <div>
+                  <label class="text-[10px] text-text-muted mb-1 block">Price (₹)</label>
+                  <input type="number" class="form-control text-sm py-1.5 text-success font-bold" [(ngModel)]="editingFlight.economyPrice" placeholder="5500">
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group mb-0 border border-border-color rounded-lg p-3 bg-bg-surface/50">
+              <label class="text-xs font-bold uppercase tracking-wider text-text-muted mb-2 block border-b border-border-color pb-2">Business Class</label>
+              <div class="grid grid-cols-2 gap-4 mt-2">
+                <div>
+                  <label class="text-[10px] text-text-muted mb-1 block">Seats</label>
+                  <input type="number" class="form-control text-sm py-1.5" [(ngModel)]="editingFlight.businessSeats" placeholder="40">
+                </div>
+                <div>
+                  <label class="text-[10px] text-text-muted mb-1 block">Price (₹)</label>
+                  <input type="number" class="form-control text-sm py-1.5 text-success font-bold" [(ngModel)]="editingFlight.businessPrice" placeholder="15000">
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group mb-0 border border-border-color rounded-lg p-3 bg-bg-surface/50">
+              <label class="text-xs font-bold uppercase tracking-wider text-text-muted mb-2 block border-b border-border-color pb-2">First Class</label>
+              <div class="grid grid-cols-2 gap-4 mt-2">
+                <div>
+                  <label class="text-[10px] text-text-muted mb-1 block">Seats</label>
+                  <input type="number" class="form-control text-sm py-1.5" [(ngModel)]="editingFlight.firstClassSeats" placeholder="20">
+                </div>
+                <div>
+                  <label class="text-[10px] text-text-muted mb-1 block">Price (₹)</label>
+                  <input type="number" class="form-control text-sm py-1.5 text-success font-bold" [(ngModel)]="editingFlight.firstClassPrice" placeholder="35000">
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group mb-0 border border-border-color rounded-lg p-3 bg-bg-surface/50">
+              <label class="text-xs font-bold uppercase tracking-wider text-text-muted mb-2 block border-b border-border-color pb-2">Seat Add-ons</label>
+              <div class="grid grid-cols-2 gap-4 mt-2">
+                <div>
+                  <label class="text-[10px] text-text-muted mb-1 block">Window Seat Plus (₹)</label>
+                  <input type="number" class="form-control text-sm py-1.5 text-success font-bold" [(ngModel)]="editingFlight.windowSeatPrice" placeholder="1000">
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group mb-0">
+              <label class="text-xs font-bold uppercase tracking-wider text-text-muted mb-2 block">Timings</label>
+              <div class="grid grid-rows-2 gap-4">
+                <input type="datetime-local" class="form-control" [(ngModel)]="editingFlight.departureTime">
+                <input type="datetime-local" class="form-control" [(ngModel)]="editingFlight.arrivalTime">
+              </div>
+            </div>
+
+            <div class="form-group mb-0">
+              <label class="text-xs font-bold uppercase tracking-wider text-text-muted mb-2 block">Total Capacity <span class="text-[9px] text-primary/60 normal-case font-normal ml-1">Must equal sum of all classes</span></label>
+              <input type="number" class="form-control" [(ngModel)]="editingFlight.totalCapacity" placeholder="180">
+            </div>
+            
+            <div class="form-group mb-0">
+              <label class="text-xs font-bold uppercase tracking-wider text-text-muted mb-2 block">Status</label>
+              <select class="form-control" [(ngModel)]="editingFlight.status">
+                <option value="Scheduled">Scheduled</option>
+                <option value="Delayed">Delayed</option>
+                <option value="Cancelled">Cancelled</option>
+                <option value="Boarding">Boarding</option>
+                <option value="Departed">Departed</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex p-6 border-t border-border-color bg-bg-surface gap-4">
+            <button class="btn btn-secondary flex-1" (click)="showEditFlight = false">Cancel</button>
+            <button class="btn btn-primary flex-1 shadow-glow" (click)="updateFlight()">
+              Save Changes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+

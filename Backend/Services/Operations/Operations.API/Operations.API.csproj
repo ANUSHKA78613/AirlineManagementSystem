@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Operations.Domain/Operations.Domain.csproj" />
+    <ProjectReference Include="../Operations.Application/Operations.Application.csproj" />
+    <ProjectReference Include="../Operations.Infrastructure/Operations.Infrastructure.csproj" />
+    <ProjectReference Include="../../Shared/Middleware/Middleware.csproj" />
+    <ProjectReference Include="../../Shared/EmailService/EmailService.csproj" />
+    <ProjectReference Include="../../Shared/EventBus/EventBus.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="10.0.5" />
+    <PackageReference Include="QuestPDF" Version="2026.2.4" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="Serilog" Version="4.1.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="6.1.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
+    <PackageReference Include="MailKit" Version="4.15.1" />
+    <PackageReference Include="Twilio" Version="7.8.0" />
+  </ItemGroup>
+</Project>
